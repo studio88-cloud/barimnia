@@ -93,6 +93,16 @@ p{margin:0;line-height:1.5;color:var(--text)}
 .path{display:flex;flex-direction:column;align-items:center;gap:18px;padding:6px 0 10px;position:relative}
 .path > *:not(.trail){position:relative;z-index:1}
 .trail{position:absolute;left:0;top:0;pointer-events:none;z-index:0;overflow:visible}
+.stop{position:relative}
+.pathpolly{position:absolute;top:-8px;width:112px;height:auto;pointer-events:none;animation:pollyfloat 3s ease-in-out infinite}
+.pathpolly.l{left:-74px}.pathpolly.r{left:136px}
+@keyframes pollyfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@media (prefers-reduced-motion: reduce){.pathpolly{animation:none}}
+.rotate{display:none}
+@media (orientation: landscape) and (max-height: 520px) and (pointer: coarse){
+  .rotate{display:flex;position:fixed;inset:0;z-index:999;background:var(--bg);flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:20px}
+  .rotate img{width:120px;height:auto}
+}
 .stop{display:flex;flex-direction:column;align-items:center;gap:6px;width:180px;text-align:center}
 .node{width:76px;height:76px;border-radius:50%;border:0;background:var(--violet);box-shadow:0 5px 0 var(--violet-dark);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;position:relative}
 .node.done{background:var(--gold);box-shadow:0 5px 0 #8f7a45;color:#1B1428}
@@ -356,13 +366,14 @@ path(){
   const tabs = Object.keys(PATHS).map(k => { const all = PATHS[k].ch.length, dn = PATHS[k].ch.filter(c => chState(c[0])==="done").length; return `<button class="${k===key?'on':''}" data-a="path" data-v="${k}">${PATHS[k].name} <span class="small">${dn}/${all}</span></button>`; }).join("");
   const offs = [0, 56, 84, 56, 0, -56, -84, -56];
   let html = "";
+  const curIdx = P0.ch.findIndex(c => CONTENT[c[0]] && chState(c[0]) !== "done");
   P0.ch.forEach((c, i) => {
     const [id, title, lv, req] = c; const st = chState(id);
     const lock = st === "empty" ? `<span class="lock">${IC.lock}</span>` : "";
     const label = st === "done" ? IC.check.replace('<svg','<svg width="30" height="30"') : id;
     const reqTxt = req ? `<span class="req">Si apre con ${req}${CONTENT[id] ? " · aperto per la prova" : ""}</span>` : "";
     const stTxt = st === "empty" ? `<span class="req">In arrivo</span>` : st === "progress" ? `<span class="req">${chDone(id)}/${CONTENT[id].steps.length} passi</span>` : "";
-    html += `<div class="stop" style="transform:translateX(${offs[i%8]}px)"><button class="node ${st==='done'?'done':st==='empty'?'empty':''}" data-a="chapter" data-v="${id}" aria-label="${id} ${title}">${label}${lock}</button><span class="t">${title}</span><span class="req">${LEVEL[lv]}</span>${reqTxt}${stTxt}</div>`;
+    html += `<div class="stop" style="transform:translateX(${offs[i%8]}px)"><button class="node ${st==='done'?'done':st==='empty'?'empty':''}" data-a="chapter" data-v="${id}" aria-label="${id} ${title}">${label}${lock}</button><span class="t">${title}</span><span class="req">${LEVEL[lv]}</span>${reqTxt}${stTxt}${i === curIdx ? (offs[i%8] > 0 ? `<img class="pathpolly l" src="${ASSETS.polly_think}" alt="Polly ti aspetta qui">` : `<img class="pathpolly r" src="${ASSETS.polly_think_sx}" alt="Polly ti aspetta qui">`) : ""}</div>`;
     if(key === "tecnica") MODULES.filter(m => m.after === id).forEach(m => { const dn = m.ch.filter(x => chState(x[0])==="done").length;
       html += `<div class="module"><div class="mhead">${IC.branch}<b>Modulo ${m.name}</b><span class="muted small">${dn}/${m.ch.length} · si apre dopo ${id}</span></div><div class="mrow">${m.ch.map(([mid,mt,mlv]) => { const ms = chState(mid); return `<button class="mnode ${ms==='done'?'done':''}" data-a="chapter" data-v="${mid}" aria-label="${mid} ${mt}"><span class="mid">${ms==='done'?IC.check:mid}</span><span class="mt">${mt}</span><span class="ml">${LEVEL[mlv]}</span></button>`; }).join("")}</div></div>`; });
   });
@@ -513,7 +524,7 @@ function evalSheet(){
 /* ---------- Disegno e azioni ---------- */
 function render(){
   const app = document.getElementById("app");
-  app.innerHTML = SCREENS[V.screen]() + (UI.eval ? evalSheet() : "") + (UI.instr ? instrSheet() : "");
+  app.innerHTML = SCREENS[V.screen]() + (UI.eval ? evalSheet() : "") + (UI.instr ? instrSheet() : "") + `<div class="rotate" role="alert"><img src="${ASSETS.polly_think_sx}" alt=""><h2>Gira il telefono</h2><p class="muted">Barimnia si usa in verticale.</p></div>`;
   const sc = app.querySelector(".screen"); if(sc && UI.scroll){ sc.scrollTop = UI.scroll; UI.scroll = 0; }
   if(V.screen === "path") requestAnimationFrame(drawTrail);
 }
@@ -534,6 +545,7 @@ function drawTrail(){
   box.prepend(svg);
 }
 window.addEventListener("resize", () => { if(V.screen === "path") drawTrail(); });
+try { if(screen.orientation && screen.orientation.lock) screen.orientation.lock("portrait").catch(() => {}); } catch(e) {}
 function go(screen, p){ P.stop(); UI = {}; V = {screen, p: p || {}}; render(); const sc = document.querySelector(".screen"); if(sc) sc.scrollTop = 0; }
 function rerender(){ const sc = document.querySelector(".screen"); UI.scroll = sc ? sc.scrollTop : 0; render(); }
 function curStep(){ return CONTENT[V.p.id].steps[V.p.i]; }

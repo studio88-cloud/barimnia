@@ -6,7 +6,7 @@ from pathlib import Path
 R = Path(__file__).resolve().parent.parent
 b64 = lambda p: base64.b64encode(p.read_bytes()).decode()
 polly = json.loads((R/'assets/img/polly.json').read_text())
-assets = {k: 'data:image/webp;base64,' + b64(R/f'assets/img/{k}.webp') for k in ['logo', 'logo_sm', 'avatar_polly']}
+assets = {k: 'data:image/webp;base64,' + b64(R/f'assets/img/{k}.webp') for k in ['logo', 'logo_sm', 'avatar_polly', 'polly_think', 'polly_think_sx']}
 for f in sorted((R/'assets/icons').glob('*.svg')):
     assets['nav_' + f.stem] = 'data:image/svg+xml;base64,' + b64(f)
 (R/'build').mkdir(exist_ok=True)
