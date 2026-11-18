@@ -522,7 +522,9 @@ function quizView(s, id, i){
       <div class="sticky stack">${pass?`<button class="btn primary" data-a="quizdone">Continua</button>`:`<button class="btn primary" data-a="quizretry">Riprova</button><button class="btn secondary" data-a="exit">Rivedi il capitolo</button>`}</div>`;
   }
   const q = s.questions[Q.k];
-  const opts = q.o.map((o,j) => { let cls = Q.sel===j ? "on" : ""; if(Q.checked){ if(j===q.c) cls = "ok"; else if(j===Q.sel) cls = "ko"; } return `<button class="opt ${cls}" data-a="pick" data-v="${j}" ${Q.checked?'disabled':''} style="text-align:left;padding:14px">${o}</button>`; }).join("");
+  /* ordine delle risposte mescolato a ogni tentativo: la giusta non è sempre la prima */
+  Q.ord = Q.ord || {}; const ord = Q.ord[Q.k] || (Q.ord[Q.k] = q.o.map((_,j) => j).map(j => [Math.random(), j]).sort((a,b) => a[0]-b[0]).map(x => x[1]));
+  const opts = ord.map(j => [q.o[j], j]).map(([o,j]) => { let cls = Q.sel===j ? "on" : ""; if(Q.checked){ if(j===q.c) cls = "ok"; else if(j===Q.sel) cls = "ko"; } return `<button class="opt ${cls}" data-a="pick" data-v="${j}" ${Q.checked?'disabled':''} style="text-align:left;padding:14px">${o}</button>`; }).join("");
   const right = Q.checked && Q.sel === q.c;
   return `<div class="muted small">Domanda ${Q.k+1} di ${s.questions.length}</div><h3 style="font-size:18px">${q.q}</h3>${q.play ? `<button class="btn secondary" data-a="qplay">${IC.play} Ascolta${q.harm?' (insieme)':''}</button>` : ""}
     <div class="stack">${opts}</div>
@@ -573,9 +575,19 @@ function hiNote(e){
   document.querySelectorAll(".n-dot.on,.n-ev.on,.n-note.on").forEach(x => x.classList.remove("on"));
   if(!e) return;
   const el = document.querySelector(`.n-ev[data-i="${e.i}"],.n-note[data-i="${e.i}"],.n-dot[data-pos="${e.s+e.f}"]`); if(el) el.classList.add("on");
+  if(el && !el.classList.contains("n-dot")) follow(document.getElementById("not"), el);
+}
+/* Scorrimento automatico: la nota che suona resta a circa un terzo della larghezza */
+function follow(box, el){
+  if(!box || box.scrollWidth <= box.clientWidth + 4) return;
+  const b = box.getBoundingClientRect(), r = el.getBoundingClientRect();
+  const target = box.scrollLeft + (r.left + r.width/2 - b.left) - box.clientWidth * 0.33;
+  const max = box.scrollWidth - box.clientWidth, to = Math.max(0, Math.min(max, target));
+  if(Math.abs(to - box.scrollLeft) < 8) return;
+  box.scrollTo({left: to, behavior: to < box.scrollLeft - box.clientWidth/2 ? "auto" : "smooth"});
 }
 function hiBeat(b, n){ const box = document.getElementById("beats"); if(!box) return; if(n && box.children.length !== n) box.innerHTML = "<i></i>".repeat(n); [...box.children].forEach((x,k) => x.classList.toggle("on", k===b)); }
-function hiChord(j){ document.querySelectorAll("#chords span").forEach((x,k) => x.classList.toggle("on", k===j)); }
+function hiChord(j){ let cur = null; document.querySelectorAll("#chords span").forEach((x,k) => { x.classList.toggle("on", k===j); if(k===j) cur = x; }); if(cur) follow(document.getElementById("chords"), cur); }
 
 /* Basi iReal Pro: un file per base, con una battuta di count-in e il finale. Il tempo si cambia con playbackRate (intonazione invariata). */
 const BASE = {a:null, info:null, failed:{}};
