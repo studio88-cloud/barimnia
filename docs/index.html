@@ -2,7 +2,7 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Barimnia – Prototipo</title>
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
@@ -16,6 +16,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
+html,body,button,a,input,label{touch-action:manipulation}
+
 :root{
   /* Palette e font di Musagete. Layout: un telefono 390x844 al centro, schermate che scorrono, barra in basso fissa. */
   --bg:#1B1428; --surface:#2A1F42; --surface-2:#34285199; --violet:#7C3AED; --violet-dark:#4C1D95;
@@ -2970,7 +2972,7 @@ function quizView(s, id, i){
   Q.ord = Q.ord || {}; const ord = Q.ord[Q.k] || (Q.ord[Q.k] = q.o.map((_,j) => j).map(j => [Math.random(), j]).sort((a,b) => a[0]-b[0]).map(x => x[1]));
   const opts = ord.map(j => [q.o[j], j]).map(([o,j]) => { let cls = Q.sel===j ? "on" : ""; if(Q.checked){ if(j===q.c) cls = "ok"; else if(j===Q.sel) cls = "ko"; } return `<button class="opt ${cls}" data-a="pick" data-v="${j}" ${Q.checked?'disabled':''} style="text-align:left;padding:14px">${o}</button>`; }).join("");
   const right = Q.checked && Q.sel === q.c;
-  return `<div class="muted small">Domanda ${Q.k+1} di ${s.questions.length}</div><h3 style="font-size:18px">${q.q}</h3>${q.play ? `<button class="btn secondary" data-a="qplay">${IC.play} Ascolta${q.harm?' (insieme)':''}</button>` : ""}
+  return `<div class="muted small">Domanda ${Q.k+1} di ${s.questions.length}</div><h3 style="font-size:18px">${q.q}</h3>${q.play ? `<button class="btn secondary" data-a="qplay">${IC.play} Ascolta${q.play.length>=3&&q.play.length<=4?' (accordo)':q.harm?' (insieme)':''}</button>` : ""}
     <div class="stack">${opts}</div>
     ${Q.checked ? `<div class="banner ${right?'good':'bad'}"><img src="${POLLY[right?'felice':'triste']}" alt="" style="width:46px;height:auto">${right?IC.check:IC.cross}<span><b>${right?'Giusto!':'Quasi!'}</b> ${right?'':'La risposta è: '+q.o[q.c]+'.'}</span></div>` : ""}
     <div class="sticky">${Q.checked ? `<button class="btn primary" data-a="qnext">Continua</button>` : `<button class="btn primary" data-a="qcheck" ${Q.sel===null?'disabled':''}>Verifica</button>`}</div>`;
@@ -3079,7 +3081,13 @@ const ACT = {
   view(v){ UI.view = v; rerender(); },
   reveal(){ UI.reveal = true; rerender(); },
   qplay(){ const s = curStep(), q = s.questions[UI.q.k]; ac(); const t0 = AC.currentTime + .05;
-    q.play.forEach((m,j) => { const t = q.harm ? t0 : t0 + j*.55; if(m >= 52){ const o = AC.createOscillator(), g = AC.createGain(); o.type = "triangle"; o.frequency.value = hz(m); env(g, t, .01, .2, q.harm ? 1.6 : .6); o.connect(g).connect(AC.destination); o.start(t); o.stop(t + 2); } else bassNote(m, t, q.harm ? 1.6 : .55); }); },
+    const voice = (m, t, d) => { if(m >= 52){ const o = AC.createOscillator(), g = AC.createGain(); o.type = "triangle"; o.frequency.value = hz(m); env(g, t, .01, .2, d); o.connect(g).connect(AC.destination); o.start(t); o.stop(t + d + .4); } else bassNote(m, t, d); };
+    const isChord = q.play.length >= 3 && q.play.length <= 4;
+    if(isChord){ /* accordo: insieme, arpeggiato, di nuovo insieme */
+      q.play.forEach(m => voice(m, t0, 1.4));
+      const ta = t0 + 1.8; q.play.forEach((m,j) => voice(m, ta + j*.5, .5));
+      const tb = ta + q.play.length*.5 + .35; q.play.forEach(m => voice(m, tb, 1.6));
+    } else q.play.forEach((m,j) => voice(m, q.harm ? t0 : t0 + j*.55, q.harm ? 1.6 : .55)); },
   opt(v){ UI.opt[v] = !UI.opt[v]; if(P.on){ P.cfg.click = UI.opt.click && !P.cfg.real; P.cfg.example = UI.opt.example; if(P.cfg.real){ if(v==='base' && !UI.opt.base && BASE.a) BASE.a.muted = true; if(v==='base' && UI.opt.base && BASE.a) BASE.a.muted = false; } else P.cfg.base = UI.opt.base && !!P.cfg.chords; } rerender(); },
   bpm(v){ UI.bpm = Math.min(240, Math.max(30, (UI.bpm || (UI.free && UI.free.bpm) || 60) + (+v))); if(UI.free) UI.free.bpm = UI.bpm; P.setBpm(UI.bpm); if(P.on && P.cfg && P.cfg.real && BASE.a) BASE.a.playbackRate = UI.bpm / P.cfg.info.bpm; const b = document.getElementById("bpmv"); if(b) b.textContent = UI.bpm; },
   "go-ex"(){
