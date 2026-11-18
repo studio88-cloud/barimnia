@@ -129,7 +129,7 @@ A12:{steps:[
    bars:"[Cmaj7] A3q:1 A7q:3 D5q:5 A6q | [Dm7] A5q:1 D3q:b3 D7q:5 E4q | [G7] E3q:1 A2q:3 A5q:5 A4q | [Cmaj7] A3q:1 A7q:3 D5q:5 D2q:3"},
   {type:"strumento", title:"E3 · Note di passaggio diatoniche", min:5, bpm:[60,100], view:"tab", style:"Jazz – Medium Swing", swing:true,
    task:"Dalla fondamentale alla fondamentale successiva passando per la scala.",
-   bars:"[Cmaj7] A3q:1 A5q:2 A7q:3 D3q:4 | [G7] D5q:8 D3q:b7 D2q:6 A5q:5 | [Am7] E5q:1 E7q:2 E8q:b3 A5q:4 | [Dm7] A5q:1 D2q:9 D3q:b3 D5q:4"},
+   bars:"[Cmaj7] A3q:1 A5q:2 A7q:3 D3q:4 | [G7] D5q:8 D3q:b7 D2q:6 A5q:5 | [Am7] E5q:1 E7q:2 E8q:b3 A7q:5 | [Dm7] A5q:1 D2q:9 D3q:b3 D5q:4"},
   {type:"pratica", title:"P1 · Blues con approcci", min:8, bpm:[70,110], view:"tab", style:"Jazz – Medium Swing", swing:true,
    task:"Un blues in Fa: nota dell'accordo sul primo tempo, approccio cromatico sul quarto.",
    bars:"[F7] E1q:1 A0q:3 A3q:5 A2q | [Bb7] A1q:1 D0q:3 D3q:5 E2q | [F7] E1q:1 A0q:3 A3q:5 E0q | [F7] E1q:1 A0q:3 A3q:5 A0q:3 | [Bb7] A1q:1 D0q:3 D3q:5 A2q | [Bb7] A1q:1 D0q:3 D1q:4 E0q | [F7] E1q:1 A0q:3 A3q:5 A4q | [D7] A5q:1 A4q A3q:b7 E4q | [Gm7] E3q:1 A1q:b3 A5q:5 A2q | [C7] A3q:1 A7q:3 E3q:5 E0q | [F7] E1q:1 A0q:3 E3q:9 A2q | [C7] A3q:1 E3q:5 A3q:1 E0q"},
