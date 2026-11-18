@@ -1,0 +1,6 @@
+# Originali WAV delle basi (troppo grandi per GitHub): restano sul tuo computer
+*.wav
+build/
+__pycache__/
+.DS_Store
+node_modules/

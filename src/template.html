@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barimnia – Prototipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Palette e font di Musagete. Layout: un telefono 390x844 al centro, schermate che scorrono, barra in basso fissa. */
+  --bg:#1B1428; --surface:#2A1F42; --surface-2:#34285199; --violet:#7C3AED; --violet-dark:#4C1D95;
+  --lavender:#C28AE3; --gold:#CDB171; --text:#F5F3FF; --muted:#B8ABD6; --border:#4C3A7A;
+  --green:#22C55E; --red:#EF4444; --amber:#F59E0B; --blue:#3B82F6;
+  --deg1:#E3B34B; --deg5:#9B6BD0; --deg8:#C28AE3; --d3:#E8955E; --d7:#6FA8DC; --d9:#5FBF9F;
+  --font:'Nunito', ui-rounded, 'Segoe UI', system-ui, -apple-system, sans-serif;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:#120D1C;color:var(--text);font-family:var(--font);font-weight:600;display:flex;align-items:center;justify-content:center;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;font-weight:700;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--lavender);outline-offset:2px}
+.phone{width:390px;height:844px;max-height:100%;max-width:100%;background:var(--bg);border-radius:28px;border:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column;position:relative}
+@media (max-width:440px),(max-height:720px){.phone{border:0;border-radius:0;width:100%;height:100%}}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 16px 24px;display:flex;flex-direction:column;gap:14px}
+.screen > *{flex-shrink:0}
+.btn svg,.round svg{width:20px;height:20px;flex:none}
+.screen.center{justify-content:center;text-align:center}
+h1{font-size:26px;font-weight:800;margin:0;text-wrap:balance}
+h2{font-size:21px;font-weight:800;margin:0;text-wrap:balance}
+h3{font-size:16px;font-weight:800;margin:0}
+p{margin:0;line-height:1.5;color:var(--text)}
+.muted{color:var(--muted);font-size:14px}
+.small{font-size:12.5px}
+.row{display:flex;gap:10px;align-items:center}
+.grow{flex:1}
+.stack{display:flex;flex-direction:column;gap:10px}
+.btn{min-height:52px;border-radius:14px;border:0;padding:0 18px;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px;width:100%}
+.btn.primary{background:var(--violet);box-shadow:0 4px 0 var(--violet-dark)}
+.btn.primary:active{transform:translateY(2px);box-shadow:0 2px 0 var(--violet-dark)}
+.btn.secondary{background:transparent;border:2px solid var(--border)}
+.btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.btn.sm{min-height:44px;font-size:14px;width:auto}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);border-radius:999px;padding:4px 10px;font-size:12.5px;color:var(--muted)}
+.chip.gold{border-color:var(--gold);color:var(--gold)}
+.seg{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:3px;gap:3px}
+.seg button{flex:1;min-height:40px;border:0;background:transparent;border-radius:9px;font-size:14px;color:var(--muted)}
+.seg button.on{background:var(--violet);color:var(--text)}
+.topbar{display:flex;align-items:center;gap:10px;min-height:48px}
+.iconbtn{width:48px;height:48px;border-radius:12px;border:0;background:transparent;display:flex;align-items:center;justify-content:center;flex:none}
+.iconbtn svg{width:24px;height:24px}
+.bar{height:10px;border-radius:999px;background:var(--surface);overflow:hidden;flex:1}
+.bar > i{display:block;height:100%;background:var(--green);border-radius:999px}
+.segbar{display:flex;gap:4px;flex:1}
+.segbar i{flex:1;height:8px;border-radius:999px;background:var(--surface)}
+.segbar i.done{background:var(--green)}
+.segbar i.cur{background:var(--lavender)}
+.polly{display:flex;align-items:flex-end;gap:10px}
+.polly img{width:96px;height:auto;flex:none}
+.polly.big{flex-direction:column;align-items:center}
+.polly.big img{width:230px}
+.bubble{background:var(--surface);border:1px solid var(--border);border-radius:16px 16px 16px 4px;padding:10px 12px;font-size:14px;line-height:1.4}
+.polly.big .bubble{border-radius:16px}
+.remember{border-left:4px solid var(--gold);background:#CDB1711A;border-radius:10px;padding:10px 12px;font-size:14px;line-height:1.45}
+.remember b{color:var(--gold);display:block;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px}
+.nav{display:flex;border-top:1px solid var(--border);background:var(--bg);padding:6px 6px 10px}
+.nav button{flex:1;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11.5px;color:var(--muted);min-height:52px;justify-content:center;border-radius:12px}
+.nav button svg{width:24px;height:24px}
+.nav button.on{color:var(--lavender)}
+.choice{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.opt{background:var(--surface);border:2px solid var(--border);border-radius:14px;padding:12px 8px;min-height:56px;text-align:center;font-size:15px}
+.opt.on{border-color:var(--lavender);background:#C28AE322}
+.opt .muted{font-size:11.5px;margin-top:4px;display:block}
+.opt.ok{border-color:var(--green);background:#22C55E22}
+.opt.ko{border-color:var(--red);background:#EF444422}
+.toggle{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px}
+.switch{width:52px;height:30px;border-radius:999px;border:0;background:var(--border);position:relative;flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--text);transition:left .15s}
+.switch.on{background:var(--violet)}
+.switch.on::after{left:25px}
+/* Percorso */
+.path{display:flex;flex-direction:column;align-items:center;gap:18px;padding:6px 0 10px}
+.stop{display:flex;flex-direction:column;align-items:center;gap:6px;width:180px;text-align:center}
+.node{width:76px;height:76px;border-radius:50%;border:0;background:var(--violet);box-shadow:0 5px 0 var(--violet-dark);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;position:relative}
+.node.done{background:var(--gold);box-shadow:0 5px 0 #8f7a45;color:#1B1428}
+.node.empty{background:var(--surface);box-shadow:0 5px 0 #20172f;color:var(--muted)}
+.node .lock{position:absolute;right:-2px;bottom:-2px;width:26px;height:26px;border-radius:50%;background:var(--bg);border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.node .lock svg{width:14px;height:14px}
+.stop .t{font-size:14px;line-height:1.25}
+.stop .req{font-size:11.5px;color:var(--muted)}
+.module{width:100%;max-width:340px;background:var(--surface);border:1px dashed var(--border);border-radius:16px;padding:10px 10px 12px}
+.mhead{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13.5px}.mhead svg{width:18px;height:18px;flex:none;color:var(--lavender)}.mhead .muted{margin-left:auto}
+.mrow{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px}
+.mnode{flex:none;width:96px;min-height:96px;border-radius:14px;border:1px solid var(--border);background:var(--bg);color:var(--text);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 6px;text-align:center;font-family:inherit}
+.mnode .mid{width:36px;height:36px;border-radius:50%;background:var(--violet);box-shadow:0 3px 0 var(--violet-dark);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+.mnode.done .mid{background:var(--green);box-shadow:0 3px 0 #15803d}.mnode .mid svg{width:18px;height:18px}
+.mnode .mt{font-size:11.5px;font-weight:700;line-height:1.2}.mnode .ml{font-size:10.5px;color:var(--muted)}
+.branch{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);background:var(--surface);border:1px dashed var(--border);border-radius:12px;padding:8px 12px;max-width:300px;line-height:1.35}
+.branch svg{width:18px;height:18px;flex:none}
+/* Capitolo */
+.steps{display:flex;flex-direction:column;gap:10px}
+.step{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px 12px;min-height:64px;text-align:left;width:100%}
+.step .ic{width:40px;height:40px;border-radius:12px;background:#7C3AED33;display:flex;align-items:center;justify-content:center;flex:none}
+.step .ic svg{width:22px;height:22px}
+.step .st{font-size:12px;color:var(--muted);text-align:right;flex:none}
+.step .st.ok{color:var(--green)}
+.step.final{border:2px solid var(--gold)}
+/* Notazione */
+.notation{background:#140F1F;border:1px solid var(--border);border-radius:14px;padding:10px 6px;overflow-x:auto}
+.notation svg{display:block}
+.n-dot circle{transition:r .08s}
+.n-dot.on circle{stroke:var(--text);stroke-width:3}
+.n-ev.on rect{fill:var(--lavender)}
+.n-ev.on text{fill:#1B1428}
+.n-note.on ellipse{fill:var(--lavender);stroke:var(--lavender)}
+.chords{display:flex;gap:6px;flex-wrap:wrap}
+.chords span{border:1px solid var(--border);border-radius:8px;padding:2px 10px;font-size:14px}
+.chords span.on{background:var(--violet);border-color:var(--violet)}
+/* Metronomo */
+.metro{display:flex;flex-direction:column;gap:12px;align-items:center}
+.bpm{display:flex;align-items:center;gap:14px}
+.bpm b{font-size:44px;font-weight:800;min-width:96px;text-align:center;font-variant-numeric:tabular-nums;line-height:1}
+.bpm small{display:block;font-size:12px;color:var(--muted);text-align:center}
+.round{width:52px;height:52px;border-radius:50%;border:2px solid var(--border);background:transparent;font-size:16px}
+.beats{display:flex;gap:10px}
+.beats i{width:12px;height:12px;border-radius:50%;background:var(--border)}
+.beats i:first-child{width:16px;height:16px;margin-top:-2px}
+.beats i.on{background:var(--lavender)}
+.opts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.opts button{border:1px solid var(--border);background:transparent;border-radius:999px;padding:0 12px;min-height:36px;font-size:13px;color:var(--muted)}
+.opts button.on{border-color:var(--lavender);color:var(--text);background:#C28AE322}
+.go{width:100%}
+/* Foglio dal basso */
+.veil{position:absolute;inset:0;background:#0009;display:flex;align-items:flex-end;z-index:5}
+.sheet{background:var(--surface);border-top:1px solid var(--border);border-radius:20px 20px 0 0;padding:18px 16px 22px;width:100%;display:flex;flex-direction:column;gap:12px;animation:up .2s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:.5}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}.switch::after{transition:none}}
+.evals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.evals button{border-radius:14px;border:2px solid var(--border);background:transparent;min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:14px}
+.evals button svg{width:20px;height:20px}
+.evals .g.on{border-color:var(--green);background:#22C55E26}
+.evals .a.on{border-color:var(--amber);background:#F59E0B26}
+.evals .r.on{border-color:var(--red);background:#EF444426}
+.banner{border-radius:14px;padding:12px;display:flex;gap:10px;align-items:center;font-size:14px}
+.banner.good{background:#22C55E22;border:1px solid var(--green)}
+.banner.bad{background:#EF444422;border:1px solid var(--red)}
+.banner.info{background:#3B82F622;border:1px solid var(--blue)}
+.banner svg{width:22px;height:22px;flex:none}
+.recipe dt{font-size:12px;color:var(--gold);text-transform:uppercase;letter-spacing:.04em;margin-top:8px}
+.recipe dd{margin:2px 0 0;line-height:1.45;font-size:14.5px}
+.recipe ol{margin:2px 0 0;padding-left:20px;line-height:1.45;font-size:14.5px}
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 0;font-size:14.5px;line-height:1.4;cursor:pointer}
+.check input{width:22px;height:22px;accent-color:var(--violet);flex:none;margin:0}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px}
+.tile b{display:block;font-size:22px;font-weight:800;font-variant-numeric:tabular-nums}
+.tile span{font-size:12.5px;color:var(--muted)}
+.toast{position:absolute;left:16px;right:16px;bottom:84px;background:var(--surface);border:1px solid var(--lavender);border-radius:14px;padding:12px 14px;font-size:14px;z-index:6}
+.sticky{position:sticky;bottom:-24px;background:linear-gradient(transparent,var(--bg) 30%);padding:14px 0 0;margin-top:auto}
+.wordmark{font-size:40px;font-weight:800;letter-spacing:.01em;background:linear-gradient(90deg,var(--gold),var(--lavender));-webkit-background-clip:text;background-clip:text;color:transparent}
+.proto{font-size:11.5px;color:var(--muted);text-align:center}
+.me{display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 0 2px}
+.avatar{position:relative;overflow:visible;width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 50% 38%,#6B55A8,#2A1F42 75%);border:3px solid var(--violet);box-shadow:0 0 0 4px rgba(124,58,237,.18);display:grid;place-items:center;cursor:pointer}
+.avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover}
+.avatar img.ph{object-fit:cover}
+.avatar .cam{position:absolute;right:-2px;bottom:-2px;width:30px;height:30px;border-radius:50%;background:var(--violet);color:#fff;display:grid;place-items:center;border:3px solid var(--bg)}
+.avatar .cam svg{width:15px;height:15px}
+.myname{background:transparent;border:0;border-bottom:1px dashed transparent;color:var(--text);font-family:inherit;font-size:20px;font-weight:800;line-height:1.2;text-align:center;width:220px;padding:2px 4px}
+.myname:focus{outline:none;border-bottom-color:var(--lavender)}
+.myname::placeholder{color:var(--muted)}
+.appbar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px 8px 14px;border-bottom:1px solid var(--border);background:var(--bg);flex:none}
+.brand{display:flex;align-items:center;gap:8px}
+.brand img.logo{height:44px;width:auto;display:block}
+.logo-big{width:min(290px,80%);height:auto;display:block;margin:0 auto}
+.navic{width:28px;height:26px;object-fit:contain;display:block}
+.wordmark.sm{font-size:22px}
+.instr{display:flex;align-items:center;gap:6px;min-height:40px;border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:0 12px;font-size:13px}
+.instr svg{width:18px;height:18px}
+.instr.mini{min-height:36px;padding:0 10px;font-size:12px}
+</style>
+</head>
+<body>
+<div class="phone" id="phone">
+  <div id="app" style="flex:1;display:flex;flex-direction:column;min-height:0"></div>
+</div>
+<script>
+"use strict";
+const POLLY = __POLLY__;
+const ASSETS = __ASSETS__;
+const BASEMAP = __BASEMAP__; /* passo → file della base iReal Pro (cartella basi/, .mp3) */
+
+/* ---------- Icone ---------- */
+const IC = {
+  cam:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>`,
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+  close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>',
+  cross:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+  dash:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 12h12"/></svg>',
+  book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 19V5"/></svg>',
+  bass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 10l6-6M18 2l4 4"/><path d="M14 10c-2-2-6-1-7 1-1 2-4 1-5 4s2 6 5 6 4-2 4-4 2-2 3-4z"/><circle cx="9" cy="15" r="1.4"/></svg>',
+  ear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2" y="14" width="5" height="7" rx="2"/><rect x="17" y="14" width="5" height="7" rx="2"/></svg>',
+  pen:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg>',
+  quiz:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/></svg>',
+  path:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="6" r="2.5"/><path d="M8 16c4-1 2-7 8-8"/></svg>',
+  metro:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6l4 18H5z"/><path d="M12 16l5-9"/></svg>',
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg>',
+  play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4l13 8-13 8z"/></svg>',
+  stop:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',
+  branch:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 3v10a5 5 0 0 0 5 5h8"/><path d="M16 15l3 3-3 3"/></svg>',
+  star:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7 7 .6-5.3 4.6 1.6 7-6.3-3.8L5.7 21l1.6-7L2 9.6 9 9z"/></svg>'
+};
+
+/* ---------- Mappa dei capitoli (bozza 1) ---------- */
+const PATHS = {
+  armonia:{name:"Armonia", ch:[
+    ["A1","Le note sul manico","B"],["A2","Leggere la musica","B"],["A3","Gli intervalli come forme","B"],["A4","Scala maggiore e tonalità","B"],["A5","Triadi e arpeggi","B"],["A6","Minore e pentatoniche","B"],["A7","Accordi di settima","I"],["A8","Armonizzare la scala","I"],["A9","Giri e forme","I"],["A10","Suonare a orecchio","I"],["A11","I modi","I"],["A12","Note di passaggio e cromatismi","A"],["A13","Dominanti secondarie e sostituzioni","A"],["A14","Minore melodica e scale simmetriche","A"],["A15","Armonia dei maestri","M"]]},
+  tecnica:{name:"Tecnica", ch:[
+    ["T1","Primo contatto","B"],["T2","La mano sinistra","B"],["T3","Il tempo","B"],["T4","Smorzare","B"],["T5","Cromatismi e salti di corda","B"],["T6","Legati","I"],["T7","Sedicesimi e ghost notes","I"],["T8","Tutto il manico","I"],["T9","Velocità e resistenza","A"],["T10","Mani da solista","M"]]},
+  laboratorio:{name:"Laboratorio", ch:[
+    ["L1","Fondamentale e quinta","B","A5 + T3"],["L2","Insieme alla cassa","B","L1 + T4"],["L3","Il blues","B","A6 + T5"],["L4","Riff e fill","I","L3 + T6"],["L5","Il primo assolo","I","A6 + L3"],["L6","Funk con le dita","I","T7 + A7"],["L7","Reggae","I","L2 + T4"],["L8","Walking 1: in due","I","A7 + T3"],["L9","Walking 2: in quattro","I","L8 + A9"],["L10","Latin","I","T7 + A8"],["L11","Brasile","I","L10"],["L12","Assolo modale","A","A11 + L5"],["L13","Slap groove","A","S3 + L6"],["L14","Walking 3: standard","A","L9 + A13"],["L15","Assolo sugli accordi","A","A12 + L12"],["L16","Tempi dispari","A","L6 + T8"],["L17","Rock duro e metal","A","P2 o T9"],["L18","Musiche del mondo","A","L10 + L16"],["L19","Repertorio classico","A","A2 + T8"],["L20","I maestri","M","A15 + un modulo M"]]}
+};
+const MODULES = [
+  {after:"T3", name:"Plettro", ch:[["P1","Primi passi","B","T3"],["P2","Plettro rock","I","P1 + T5"],["P3","Plettro veloce","A","P2 + T7"]]},
+  {after:"T4", name:"Slap", ch:[["S1","Il pollice","I","T4"],["S2","Il pop","I","S1"],["S3","Combinazioni","A","S2 + T7"],["S4","Double thumbing","A","S3"],["S5","Slap dei maestri","M","S4 + T9"]]},
+  {after:"T6", name:"Armonici e tapping", ch:[["H1","Armonici naturali","I","T6"],["H2","Armonici artificiali","A","H1 + T8"],["H3","Tapping","A","T8"],["H4","Due mani, un'orchestra","M","H3 + T10"]]},
+  {after:"T6", name:"Accordi", ch:[["C1","Doppie corde","I","T6 + A5"],["C2","Accordi sul basso","A","C1 + A7"],["C3","Il pollice come capotasto","M","C2"]]},
+  {after:"T8", name:"Fretless", ch:[["F1","Senza tasti","A","T8"],["F2","Fretless espressivo","M","F1 + H1"]]}
+];
+const ALLCH = {}; Object.values(PATHS).forEach(p => p.ch.forEach(c => ALLCH[c[0]] = c)); MODULES.forEach(m => m.ch.forEach(c => ALLCH[c[0]] = c));
+const LEVEL = {B:"Base", I:"Intermedio", A:"Avanzato", M:"Maestri"};
+
+/* ---------- Contenuti dei capitoli provati: T1, A1, L1 ----------
+   Notazione compatta: corda+tasto+durata (q semiminima, e ottavo, h minima), :1 :5 :8 = grado; r = pausa; [Sigla] all'inizio della battuta. */
+const CONTENT = {};
+/*__CONTENT__*/
+const TYPE = {lezione:["Lezione",IC.book], app:["Esercizio",IC.quiz], strumento:["Sullo strumento",IC.bass], pratica:["Pratica",IC.bass], modello:["Modello",IC.ear], crea:["Crea",IC.pen], quiz:["Quiz",IC.quiz]};
+
+/* ---------- Stato (resta solo in questo browser) ---------- */
+const DEF = {setup:false, strings:4, lefty:false, goal:15, rigor:false, path:"tecnica", done:{}, evals:{}, best:{}, practice:{}};
+let S;
+try { S = Object.assign({}, DEF, JSON.parse(localStorage.getItem("barimnia-proto") || "{}")); } catch(e){ S = Object.assign({}, DEF); }
+function save(){ try{ localStorage.setItem("barimnia-proto", JSON.stringify(S)); }catch(e){} }
+let V = {screen: S.setup ? "path" : "welcome", p:{}};
+let UI = {};
+
+/* ---------- Musica: corde, note, notazione ---------- */
+const OPEN = {B:23, E:28, A:33, D:38, G:43, C:48};
+const IT = ["Do","Do♯","Re","Re♯","Mi","Fa","Fa♯","Sol","Sol♯","La","La♯","Si"];
+const EN = ["C","C♯","D","D♯","E","F","F♯","G","G♯","A","A♯","B"];
+const STRNAME = {B:"Si", E:"Mi", A:"La", D:"Re", G:"Sol", C:"Do"};
+function strings(){ return S.strings===4 ? ["G","D","A","E"] : S.strings===5 ? ["G","D","A","E","B"] : ["C","G","D","A","E","B"]; }
+/*__SRC_NOTATION__*/
+/* ---------- Audio: metronomo, esempio, base ---------- */
+let AC = null, NOISE = null;
+function ac(){
+  if(!AC){ AC = new (window.AudioContext || window.webkitAudioContext)(); const len = AC.sampleRate; NOISE = AC.createBuffer(1, len, AC.sampleRate); const d = NOISE.getChannelData(0); for(let i=0;i<len;i++) d[i] = Math.random()*2-1; }
+  if(AC.state === "suspended") AC.resume();
+  return AC;
+}
+const hz = m => 440 * Math.pow(2, (m-69)/12);
+function env(g, t, a, peak, dec){ g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(peak, t+a); g.gain.exponentialRampToValueAtTime(0.0001, t+a+dec); }
+function click(t, accent, mid){ const o = AC.createOscillator(), g = AC.createGain(); o.type="square"; o.frequency.value = accent ? 1760 : mid ? 1450 : 1180; env(g,t,.002,accent?.22:mid?.17:.12,.03); o.connect(g).connect(AC.destination); o.start(t); o.stop(t+.06); }
+function bassNote(m, t, dur, vol){ vol = vol || 1; const o = AC.createOscillator(), f = AC.createBiquadFilter(), g = AC.createGain(); o.type="sawtooth"; o.frequency.value = hz(m); f.type="lowpass"; f.frequency.setValueAtTime(1100,t); f.frequency.exponentialRampToValueAtTime(260, t+dur); env(g,t,.006,.33*vol,Math.max(.08,dur*.95)); o.connect(f).connect(g).connect(AC.destination); o.start(t); o.stop(t+dur+.1); }
+function noise(t, type, freq, peak, dec){ const s = AC.createBufferSource(), f = AC.createBiquadFilter(), g = AC.createGain(); s.buffer = NOISE; f.type = type; f.frequency.value = freq; env(g,t,.002,peak,dec); s.connect(f).connect(g).connect(AC.destination); s.start(t); s.stop(t+dec+.05); }
+function kick(t){ const o = AC.createOscillator(), g = AC.createGain(); o.frequency.setValueAtTime(130,t); o.frequency.exponentialRampToValueAtTime(42,t+.14); env(g,t,.003,.65,.2); o.connect(g).connect(AC.destination); o.start(t); o.stop(t+.3); }
+/*__SRC_AUDIO__*/
+function today(){ const d = new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function addPractice(sec){ const k = today(); S.practice[k] = (S.practice[k]||0) + sec; save(); }
+function streak(){
+  let n = 0; const d = new Date();
+  if(((S.practice[today()]||0) / 60) < S.goal) d.setDate(d.getDate()-1);
+  for(;;){ const k = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); if(((S.practice[k]||0)/60) >= S.goal){ n++; d.setDate(d.getDate()-1); } else break; }
+  return n;
+}
+function fmtMin(sec){ const m = Math.round(sec/60); return m < 60 ? m + " min" : Math.floor(m/60) + " h " + (m%60) + " min"; }
+
+/* ---------- Avanzamento ---------- */
+const stepKey = (ch,i) => ch + "-" + i;
+function chState(id){
+  const c = CONTENT[id]; if(!c) return "empty";
+  const n = c.steps.filter((s,i) => S.done[stepKey(id,i)]).length;
+  return n === c.steps.length ? "done" : n ? "progress" : "todo";
+}
+function chDone(id){ const c = CONTENT[id]; return c ? c.steps.filter((s,i) => S.done[stepKey(id,i)]).length : 0; }
+function chTitle(id){ return ALLCH[id] ? ALLCH[id][1] : id; }
+
+/* ---------- Componenti ---------- */
+const pollyImg = (pose, alt) => `<img src="${POLLY[pose] || POLLY.basso}" alt="${alt || 'Polly'}">`;
+const pollySay = (pose, text, big) => `<div class="polly ${big?'big':''}">${pollyImg(pose)}<div class="bubble">${text}</div></div>`;
+function nav(){
+  const it = [["path","Percorso"],["practice","Pratica"],["handbook","Prontuario"],["profile","Profilo"]];
+  return `<nav class="nav">${it.map(([k,l]) => { const on = V.screen===k; return `<button data-a="go" data-v="${k}" class="${on?'on':''}" aria-label="${l}"${on?' aria-current="page"':''}><img class="navic" src="${ASSETS['nav_'+k+(on?'_on':'')]}" alt=""><span>${l}</span></button>`; }).join("")}</nav>`;
+}
+function toast(msg){ const old = document.querySelector(".toast"); if(old) old.remove(); const t = document.createElement("div"); t.className = "toast"; t.setAttribute("role","status"); t.textContent = msg; document.getElementById("phone").appendChild(t); setTimeout(() => t.remove(), 2600); }
+
+function instrBtn(mini){ return `<button class="instr ${mini?'mini':''}" data-a="instr" aria-label="Cambia strumento">${IC.bass}${S.strings} corde${S.lefty?' · mancino':''}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" style="width:14px;height:14px"><path d="M6 9l6 6 6-6"/></svg></button>`; }
+function header(){ return `<header class="appbar"><div class="brand"><img class="logo" src="${ASSETS.logo_sm}" alt="Barimnia"></div><div class="row" style="gap:6px"><span class="chip gold" title="Serie di giorni">${IC.star.replace('<svg','<svg width="14" height="14"')} ${streak()}</span>${instrBtn()}</div></header>`; }
+function instrSheet(){ return `<div class="veil"><div class="sheet" role="dialog" aria-label="Strumento"><h2>Il tuo strumento</h2><p class="muted small">Cambia quando vuoi: manico, tab ed esercizi si aggiornano subito.</p>
+  <div class="seg">${[4,5,6].map(n => `<button class="${S.strings===n?'on':''}" data-a="strings" data-v="${n}">${n} corde</button>`).join("")}</div>
+  <div class="toggle"><span>Suono da mancino</span><button class="switch ${S.lefty?'on':''}" data-a="lefty" role="switch" aria-checked="${S.lefty}" aria-label="Suono da mancino"></button></div>
+  <button class="btn primary" data-a="instrclose">Fatto</button></div></div>`; }
+
+/* ---------- Schermate ---------- */
+const SCREENS = {
+welcome(){
+  return `<div class="screen center" style="gap:18px">
+    ${pollySay("basso","Ehi, io sono Polly! Tu porti il basso, io porto il groove.", true)}
+    <img class="logo-big" src="${ASSETS.logo}" alt="Barimnia">
+    <p class="muted">Il basso si impara suonando. Pochi minuti al giorno, sul tuo strumento, al tuo ritmo.</p>
+    <div class="stack" style="margin-top:8px"><button class="btn primary" data-a="go" data-v="bass">Si parte!</button></div>
+    <p class="proto">Prototipo: i dati restano in questo browser.</p></div>`;
+},
+bass(){
+  const card = (n, names) => `<button class="opt ${S.strings===n?'on':''}" data-a="strings" data-v="${n}" aria-pressed="${S.strings===n}">${n} corde<span class="muted">${names}</span></button>`;
+  return `<div class="screen">
+    <h1>Che basso hai in mano?</h1>
+    <p class="muted">Manico, tab ed esercizi si adattano al tuo strumento. Puoi cambiarlo quando vuoi, dalla barra in alto.</p>
+    <div class="choice">${card(4,"Mi La Re Sol")}${card(5,"Si Mi La Re Sol")}${card(6,"Si Mi La Re Sol Do")}</div>
+    <div class="card toggle"><span>Suono da mancino</span><button class="switch ${S.lefty?'on':''}" data-a="lefty" role="switch" aria-checked="${S.lefty}" aria-label="Suono da mancino"></button></div>
+    <div class="notation">${svgBoard(boardPositions(strings().map(s=>s+"0").join(" ")))}</div>
+    <h3>Quanto tempo ci dai ogni giorno?</h3>
+    <div class="choice">${[[10,"Relax"],[15,"Costante"],[30,"Full immersion"]].map(([m,l]) => `<button class="opt ${S.goal===m?'on':''}" data-a="goal" data-v="${m}">${m} min<span class="muted">${l}</span></button>`).join("")}</div>
+    <div class="sticky"><button class="btn primary" data-a="go" data-v="plays">Avanti</button></div></div>`;
+},
+plays(){
+  return `<div class="screen center" style="gap:16px">
+    ${pollySay("messaggera","Barimnia, la musa dei bassisti, vuole sentirti suonare.", true)}
+    <h1>Sai già suonare?</h1>
+    <p class="muted">Fai l'audizione e salta quello che sai già: 10 minuti, basso in mano. Oppure parti da zero, nessuno nasce bassista.</p>
+    <div class="stack"><button class="btn primary" data-a="go" data-v="audition">Fammi l'audizione</button><button class="btn secondary" data-a="start">Parto da zero</button></div></div>`;
+},
+audition(){
+  return `<div class="screen center" style="gap:16px">
+    ${pollySay("pensierosa","L'audizione arriva presto. Intanto partiamo da zero, insieme.", true)}
+    <h2>Audizione</h2>
+    <p class="muted">Nel prototipo si parte da zero. Il piazzamento si aggiungerà man mano che i capitoli vengono confermati.</p>
+    <button class="btn primary" data-a="start">Vai al percorso</button></div>`;
+},
+path(){
+  const key = S.path, P0 = PATHS[key];
+  const tabs = Object.keys(PATHS).map(k => { const all = PATHS[k].ch.length, dn = PATHS[k].ch.filter(c => chState(c[0])==="done").length; return `<button class="${k===key?'on':''}" data-a="path" data-v="${k}">${PATHS[k].name} <span class="small">${dn}/${all}</span></button>`; }).join("");
+  const offs = [0, 56, 84, 56, 0, -56, -84, -56];
+  let html = "";
+  P0.ch.forEach((c, i) => {
+    const [id, title, lv, req] = c; const st = chState(id);
+    const lock = st === "empty" ? `<span class="lock">${IC.lock}</span>` : "";
+    const label = st === "done" ? IC.check.replace('<svg','<svg width="30" height="30"') : id;
+    const reqTxt = req ? `<span class="req">Si apre con ${req}${CONTENT[id] ? " · aperto per la prova" : ""}</span>` : "";
+    const stTxt = st === "empty" ? `<span class="req">In arrivo</span>` : st === "progress" ? `<span class="req">${chDone(id)}/${CONTENT[id].steps.length} passi</span>` : "";
+    html += `<div class="stop" style="transform:translateX(${offs[i%8]}px)"><button class="node ${st==='done'?'done':st==='empty'?'empty':''}" data-a="chapter" data-v="${id}" aria-label="${id} ${title}">${label}${lock}</button><span class="t">${title}</span><span class="req">${LEVEL[lv]}</span>${reqTxt}${stTxt}</div>`;
+    if(key === "tecnica") MODULES.filter(m => m.after === id).forEach(m => { const dn = m.ch.filter(x => chState(x[0])==="done").length;
+      html += `<div class="module"><div class="mhead">${IC.branch}<b>Modulo ${m.name}</b><span class="muted small">${dn}/${m.ch.length} · si apre dopo ${id}</span></div><div class="mrow">${m.ch.map(([mid,mt,mlv]) => { const ms = chState(mid); return `<button class="mnode ${ms==='done'?'done':''}" data-a="chapter" data-v="${mid}" aria-label="${mid} ${mt}"><span class="mid">${ms==='done'?IC.check:mid}</span><span class="mt">${mt}</span><span class="ml">${LEVEL[mlv]}</span></button>`; }).join("")}</div></div>`; });
+  });
+  return `${header()}<div class="screen"><h1>Percorso</h1>
+    <div class="seg" role="tablist">${tabs}</div><div class="path">${html}</div></div>${nav()}`;
+},
+chapter(){
+  const id = V.p.id, c = CONTENT[id], n = c.steps.length, d = chDone(id);
+  const rows = c.steps.map((s,i) => {
+    const [tl, ic] = TYPE[s.type]; const done = S.done[stepKey(id,i)]; const best = S.best[stepKey(id,i)];
+    let st = done ? `<span class="st ok">Completato</span>` : `<span class="st">Da fare</span>`;
+    if(s.bpm && Array.isArray(s.bpm) && best) st = `<span class="st ${done?'ok':''}">${best}/${s.bpm[1]} BPM</span>`;
+    return `<button class="step ${s.type==='quiz'?'final':''}" data-a="step" data-v="${i}"><span class="ic">${ic}</span><span class="grow"><span style="display:block">${s.title}</span><span class="muted small">${tl} · ${s.min} min${s.type==='quiz'?' · 80% per chiudere il capitolo':''}</span></span>${st}</button>`;
+  }).join("");
+  return `<div class="screen"><div class="topbar"><button class="iconbtn" data-a="go" data-v="path" aria-label="Torna al percorso">${IC.back}</button><div class="grow"><div class="muted small">${id} · ${LEVEL[ALLCH[id][2]]}${ALLCH[id][3] ? ' · si apre con ' + ALLCH[id][3] : ''}</div><h2>${chTitle(id)}</h2></div></div>
+    <div class="row"><div class="bar"><i style="width:${d/n*100}%"></i></div><span class="muted small">${d}/${n}</span></div>
+    <div class="steps">${rows}</div></div>${nav()}`;
+},
+step(){
+  const id = V.p.id, i = V.p.i, c = CONTENT[id], s = c.steps[i];
+  const seg = c.steps.map((x,k) => `<i class="${k===i?'cur':S.done[stepKey(id,k)]?'done':''}"></i>`).join("");
+  const head = `<div class="topbar"><button class="iconbtn" data-a="exit" aria-label="Esci dal passo">${IC.close}</button><div class="segbar">${seg}</div>${["strumento","pratica","modello"].includes(s.type)?instrBtn(true):""}</div><div><div class="muted small">${TYPE[s.type][0]} · passo ${i+1} di ${c.steps.length}</div><h2>${s.title}</h2></div>`;
+  return `<div class="screen">${head}${STEP[s.type](s, id, i)}</div>`;
+},
+practice(){
+  const loops = {rock:["Rock in La",["A","A","D","E"],100], pop:["Pop in Do",["C","G","Am","F"],84], blues:["Blues in Mi",["E7","A7","E7","B7"],90]};
+  UI.loop = UI.loop || "rock"; const L = loops[UI.loop];
+  UI.free = UI.free || {bpm:L[2]};
+  return `${header()}<div class="screen"><h1>Pratica libera</h1><p class="muted">Suona quello che vuoi con metronomo o base. Il tempo che passi a suonare conta per l'obiettivo di oggi.</p>
+    <div class="notation">${svgBoard(boardPositions("naturali"))}</div>
+    <div class="opts">${Object.keys(loops).map(k => `<button class="${UI.loop===k?'on':''}" data-a="loop" data-v="${k}">${loops[k][0]}</button>`).join("")}</div>
+    <div class="chords" id="chords">${L[1].map((c,j) => `<span data-c="${j}">${c}</span>`).join("")}</div>
+    ${metroBlock(UI.free.bpm, {base:true, free:true})}</div>${nav()}`;
+},
+handbook(){
+  const sec = [["Le note sul manico","Da A1", true],["Intervalli","Da A3"],["Scale","Da A4 e A6"],["Accordi","Da A5 e A7"],["Armonici","Dal modulo Armonici e tapping"],["Strumento e suono","Corde, altezza delle corde, amplificazione"]];
+  return `${header()}<div class="screen"><h1>Prontuario</h1>
+    ${sec.map(([t,d,open]) => `<div class="card"><div class="row"><div class="grow"><h3>${t}</h3><span class="muted small">${d}</span></div>${open?'<span class="chip">Aperto</span>':'<span class="chip">'+IC.lock.replace('<svg','<svg width="12" height="12"')+' In arrivo</span>'}</div>${open?`<div class="notation" style="margin-top:10px">${svgBoard(boardPositions("naturali"))}</div>`:''}</div>`).join("")}</div>${nav()}`;
+},
+profile(){
+  const tot = Object.values(S.practice).reduce((a,b) => a+b, 0), now = (S.practice[today()]||0)/60;
+  const chDoneN = Object.keys(CONTENT).filter(k => chState(k)==="done").length;
+  const best = S.best[stepKey("T1",10)] || 0;
+  return `${header()}<div class="screen"><div class="me">
+      <label class="avatar" aria-label="Cambia foto profilo">${S.avatar ? `<img src="${S.avatar}" alt="Foto profilo">` : `<img class="ph" src="${ASSETS.avatar_polly}" alt="Polly, in attesa della tua foto">`}<span class="cam">${IC.cam}</span><input type="file" accept="image/*" id="avatarIn" hidden></label>
+      <input class="myname" id="nameIn" value="${(S.name||'').replace(/"/g,'&quot;')}" placeholder="Il tuo nome" aria-label="Il tuo nome" maxlength="24">
+      <span class="muted small">${S.strings} corde${S.lefty?' · mancino':''} · obiettivo ${S.goal} min al giorno</span>
+    </div>
+    <div class="tiles"><div class="tile"><b>${fmtMin(tot)}</b><span>Minuti di pratica</span></div><div class="tile"><b>${streak()} giorni</b><span>Serie</span></div>
+    <div class="tile"><b>${Math.floor(now)} di ${S.goal} min</b><span>Oggi</span><div class="bar" style="margin-top:6px"><i style="width:${Math.min(100,now/S.goal*100)}%;background:var(--gold)"></i></div></div><div class="tile"><b>${chDoneN} / 45</b><span>Capitoli completati</span></div></div>
+    <div class="card stack"><h3>Sfida della settimana</h3><p class="small">Porta “Il tuo primo groove” a 100 BPM.</p><div class="row"><div class="bar"><i style="width:${Math.min(100,best/100*100)}%"></i></div><span class="muted small">${best||0}/100</span></div></div>
+    <div class="card stack"><h3>Strumento</h3>
+      <div class="seg">${[4,5,6].map(n => `<button class="${S.strings===n?'on':''}" data-a="strings" data-v="${n}">${n} corde</button>`).join("")}</div>
+      <div class="toggle"><span>Suono da mancino</span><button class="switch ${S.lefty?'on':''}" data-a="lefty" role="switch" aria-checked="${S.lefty}" aria-label="Suono da mancino"></button></div></div>
+    <div class="card stack"><h3>Obiettivo giornaliero</h3><div class="seg">${[10,15,30].map(m => `<button class="${S.goal===m?'on':''}" data-a="goal" data-v="${m}">${m} min</button>`).join("")}</div></div>
+    <div class="card"><div class="toggle"><span><b>Modalità rigorosa</b><br><span class="muted small">Un capitolo si chiude solo quando tutti gli esercizi sono “pulito” al BPM obiettivo.</span></span><button class="switch ${S.rigor?'on':''}" data-a="rigor" role="switch" aria-checked="${S.rigor}" aria-label="Modalità rigorosa"></button></div></div>
+    <button class="btn secondary" data-a="go" data-v="plays">Rifai l'audizione</button>
+    <button class="btn secondary" data-a="reset">Azzera i progressi (prototipo)</button><p class="muted small" style="text-align:center;margin-top:6px">Basi musicali realizzate con iReal Pro.</p></div>${nav()}`;
+}
+};
+
+function metroBlock(bpm, o){
+  o = o || {};
+  const opt = UI.opt || (UI.opt = {click:true, example:false, base:true});
+  return `<div class="card metro">
+    <div class="bpm"><button class="round" data-a="bpm" data-v="-5" aria-label="Meno 5 BPM">−5</button><div><b id="bpmv">${bpm}</b><small>BPM</small></div><button class="round" data-a="bpm" data-v="5" aria-label="Più 5 BPM">+5</button></div>
+    <div class="beats" id="beats">${"<i></i>".repeat(o.dots||4)}</div>
+    <div class="opts"><button class="${opt.click?'on':''}" data-a="opt" data-v="click">Click</button>${o.free||o.noex?'':`<button class="${opt.example?'on':''}" data-a="opt" data-v="example">Ascolta l'esempio</button>`}${o.base?`<button class="${opt.base?'on':''}" data-a="opt" data-v="base">Base</button>`:''}</div>
+    <button class="btn primary go" id="gobtn" data-a="${o.free?'freego':'go-ex'}">${P.on?IC.stop+' Ferma':IC.play+' Avvia'}</button></div>`;
+}
+
+const STEP = {
+lezione(s, id, i){
+  const pos = s.board ? boardPositions(s.board) : null;
+  return `${s.text.map(t => `<p>${t}</p>`).join("")}
+    ${s.remember ? `<div class="remember"><b>Da ricordare</b>${s.remember}</div>` : ""}
+    ${pos ? `<div class="notation">${svgBoard(pos, {letters:s.letters})}</div>` : ""}
+    ${s.refs ? `<div class="opts">${["E","A","D","G"].map(k => `<button data-a="ref" data-v="${k}">Ascolta il ${STRNAME[k]}</button>`).join("")}</div>` : ""}
+    ${pollySay(s.polly[0], s.polly[1])}
+    <div class="sticky"><button class="btn primary" data-a="next">Avanti</button></div>`;
+},
+app(s, id, i){ return quizView(s, id, i); },
+quiz(s, id, i){ return quizView(s, id, i); },
+strumento(s, id, i){ return exView(s, id, i); },
+pratica(s, id, i){ return exView(s, id, i); },
+modello(s, id, i){ return exView(s, id, i); },
+crea(s, id, i){
+  const r = s.recipe; UI.chk = UI.chk || s.checklist.map(() => false); UI.bpm = UI.bpm || s.bpm;
+  const all = UI.chk.every(Boolean);
+  return `<div class="card recipe"><dl style="margin:0">
+      <dt>Base</dt><dd>${r.base}</dd><dt>Ingredienti</dt><dd>${r.ing}</dd>
+      <dt>Regole</dt><dd><ol>${r.rules.map(x => `<li>${x}</li>`).join("")}</ol></dd><dt>Obiettivo</dt><dd>${r.goal}</dd></dl>
+      <details style="margin-top:10px"><summary class="muted small" style="cursor:pointer;min-height:32px">Aiuto</summary><p class="small" style="margin-top:6px">${r.help}</p></details></div>
+    <div class="chords" id="chords">${s.chords.flatMap(c => c.split(/\s+/)).map((c,j) => `<span data-c="${j}">${c}</span>`).join("")}</div>
+    ${metroBlock(UI.bpm || s.bpm, {base:true, noex:true})}${BASEMAP[stepKey(id,i)] && !s.nobase ? `<p class="muted small" style="margin-top:-4px">Base iReal Pro registrata a ${BASEMAP[stepKey(id,i)].bpm} BPM, con count-in. Il click si spegne quando suona la base. Cambia il tempo con −5 / +5.</p>` : ""}
+    <button class="btn secondary" data-a="rec">Registra</button>
+    ${pollySay("cuffie","Registrati e riascoltati: le orecchie non mentono.")}
+    <div class="card"><h3 style="margin-bottom:4px">Checklist</h3>${s.checklist.map((t,k) => `<label class="check"><input type="checkbox" id="chk${k}" data-a="chk" data-v="${k}" ${UI.chk[k]?'checked':''}><span>${t}</span></label>`).join("")}</div>
+    <div class="sticky"><button class="btn primary" data-a="finish" ${all?'':'disabled'}>Ho finito</button></div>`;
+}
+};
+
+function exView(s, id, i){
+  const k = stepKey(id,i); const parsed = UI.parsed || (UI.parsed = parseBars(s.bars, s.meter));
+  UI.view = UI.view || s.view; UI.bpm = UI.bpm || s.bpm[0];
+  const best = S.best[k];
+  const views = [["pallini","Pallini"],["tab","Tab"],["staff","Pentagramma"]];
+  let not = UI.view === "pallini" ? svgBoard(parsed.events) : UI.view === "tab" ? svgTab(parsed, {rh:s.rh}) : svgStaff(parsed, {flats:s.flats, swing:s.swing});
+  if(s.hide && !UI.reveal) not = `<div style="padding:22px 8px;text-align:center"><p class="muted small" style="margin-bottom:10px">La soluzione è nascosta: prima trovala a orecchio sullo strumento.</p><button class="btn sm secondary" data-a="reveal">Mostra la soluzione</button></div>`;
+  if(s.hide && UI.exInit !== k){ UI.opt = UI.opt || {click:true, example:false, base:true}; UI.opt.example = true; UI.exInit = k; }
+  const chords = parsed.bars.some(b => b.chords) && !(s.hide && !UI.reveal) ? `<div class="chords" id="chords">${parsed.bars.flatMap(b => (b.chords||[]).map(x => x.c)).map((c,j) => `<span data-c="${j}">${c}</span>`).join("")}</div>` : "";
+  const ev = S.evals[k] || []; const last2 = ev.slice(-2);
+  const propose = !UI.noPropose && last2.length===2 && last2.every(e => e.r==="g") && UI.bpm < s.bpm[1];
+  return `<p>${s.task}</p>
+    <div class="row" style="flex-wrap:wrap;gap:6px"><span class="chip">Partenza ${s.bpm[0]}</span><span class="chip gold">Obiettivo ${s.bpm[1]} BPM</span>${best?`<span class="chip">Record ${best}</span>`:""}</div>
+    <div class="seg" role="tablist" aria-label="Vista">${views.map(([v,l]) => `<button class="${UI.view===v?'on':''}" data-a="view" data-v="${v}">${l}</button>`).join("")}</div>
+    ${chords}<div class="notation" id="not">${not}</div>${s.tip?`<div class="remember"><b>Consiglio</b>${s.tip}</div>`:""}
+    ${propose ? `<div class="banner info"><img src="${POLLY.carica}" alt="" style="width:56px;height:auto"><span class="grow">Due volte pulito! Alziamo di 5 BPM?</span><button class="btn sm primary" data-a="plus5">Sì</button><button class="btn sm secondary" data-a="nopropose">Non ancora</button></div>` : ""}
+    ${metroBlock(UI.bpm, {base: !!chords})}${BASEMAP[k] && !s.nobase ? `<p class="muted small" style="margin-top:-4px">Base iReal Pro registrata a ${BASEMAP[k].bpm} BPM, con count-in. Il click si spegne quando suona la base. Cambia il tempo con −5 / +5.</p>` : ""}
+    ${pollySay(s.type==="modello"?"cuffie":"conta", s.type==="modello" ? "Ascolta l'esempio, poi tocca a te." : "Lento e pulito batte veloce e sporco. Sempre.")}
+    <div class="sticky"><button class="btn primary" data-a="next" ${S.done[k]?'':'disabled'}>${S.done[k]?'Continua':'Segna com\'è andata per continuare'}</button></div>`;
+}
+function quizView(s, id, i){
+  const Q = UI.q || (UI.q = {k:0, sel:null, checked:false, score:0, end:false});
+  if(Q.end){
+    const pct = Math.round(Q.score / s.questions.length * 100), pass = s.type!=="quiz" || pct >= 80;
+    return `${pollySay(pass?(s.type==="quiz"?"festa":"felice"):"triste", pass ? (s.type==="quiz"?"Capitolo in tasca! Barimnia approva.":"Esatto! Orecchio da bassista.") : "Ci sei quasi. La seconda volta suona sempre meglio.", true)}
+      <div style="text-align:center"><h1>${pass ? (s.type==="quiz"?"Capitolo superato!":"Fatto!") : "Ci sei quasi"}</h1><p class="muted">${Q.score} su ${s.questions.length} (${pct}%)${s.type==="quiz"&&!pass?" · ti serve l'80% per chiudere il capitolo":""}</p></div>
+      <div class="sticky stack">${pass?`<button class="btn primary" data-a="quizdone">Continua</button>`:`<button class="btn primary" data-a="quizretry">Riprova</button><button class="btn secondary" data-a="exit">Rivedi il capitolo</button>`}</div>`;
+  }
+  const q = s.questions[Q.k];
+  const opts = q.o.map((o,j) => { let cls = Q.sel===j ? "on" : ""; if(Q.checked){ if(j===q.c) cls = "ok"; else if(j===Q.sel) cls = "ko"; } return `<button class="opt ${cls}" data-a="pick" data-v="${j}" ${Q.checked?'disabled':''} style="text-align:left;padding:14px">${o}</button>`; }).join("");
+  const right = Q.checked && Q.sel === q.c;
+  return `<div class="muted small">Domanda ${Q.k+1} di ${s.questions.length}</div><h3 style="font-size:18px">${q.q}</h3>${q.play ? `<button class="btn secondary" data-a="qplay">${IC.play} Ascolta${q.harm?' (insieme)':''}</button>` : ""}
+    <div class="stack">${opts}</div>
+    ${Q.checked ? `<div class="banner ${right?'good':'bad'}"><img src="${POLLY[right?'felice':'triste']}" alt="" style="width:46px;height:auto">${right?IC.check:IC.cross}<span><b>${right?'Giusto!':'Quasi!'}</b> ${right?'':'La risposta è: '+q.o[q.c]+'.'}</span></div>` : ""}
+    <div class="sticky">${Q.checked ? `<button class="btn primary" data-a="qnext">Continua</button>` : `<button class="btn primary" data-a="qcheck" ${Q.sel===null?'disabled':''}>Verifica</button>`}</div>`;
+}
+function evalSheet(){
+  const s = CONTENT[V.p.id].steps[V.p.i]; const E = UI.eval;
+  return `<div class="veil"><div class="sheet" role="dialog" aria-label="Autovalutazione"><h2>Com'è andata?</h2>
+    <div class="evals"><button class="g ${E.r==='g'?'on':''}" data-a="er" data-v="g">${IC.check}Pulito</button><button class="a ${E.r==='a'?'on':''}" data-a="er" data-v="a">${IC.dash}Quasi</button><button class="r ${E.r==='r'?'on':''}" data-a="er" data-v="r">${IC.cross}Da rifare</button></div>
+    <div class="row"><span class="grow">BPM raggiunto</span><button class="round" data-a="ebpm" data-v="-5" aria-label="Meno 5">−5</button><b style="font-size:22px;min-width:48px;text-align:center">${E.bpm}</b><button class="round" data-a="ebpm" data-v="5" aria-label="Più 5">+5</button></div>
+    ${S.rigor ? `<p class="muted small">Modalità rigorosa: il passo si completa con “pulito” a ${s.bpm[1]} BPM.</p>` : ""}
+    <button class="btn primary" data-a="esave" ${E.r?'':'disabled'}>Salva</button><button class="btn secondary" data-a="eclose">Annulla</button></div></div>`;
+}
+
+/* ---------- Disegno e azioni ---------- */
+function render(){
+  const app = document.getElementById("app");
+  app.innerHTML = SCREENS[V.screen]() + (UI.eval ? evalSheet() : "") + (UI.instr ? instrSheet() : "");
+  const sc = app.querySelector(".screen"); if(sc && UI.scroll){ sc.scrollTop = UI.scroll; UI.scroll = 0; }
+}
+function go(screen, p){ P.stop(); UI = {}; V = {screen, p: p || {}}; render(); const sc = document.querySelector(".screen"); if(sc) sc.scrollTop = 0; }
+function rerender(){ const sc = document.querySelector(".screen"); UI.scroll = sc ? sc.scrollTop : 0; render(); }
+function curStep(){ return CONTENT[V.p.id].steps[V.p.i]; }
+function markDone(){ S.done[stepKey(V.p.id, V.p.i)] = true; save(); }
+function nextStep(){ const c = CONTENT[V.p.id]; if(V.p.i + 1 < c.steps.length) go("step", {id:V.p.id, i:V.p.i+1}); else { go("chapter", {id:V.p.id}); if(chState(V.p.id)==="done") toast("Capitolo completato! Nuove tappe si apriranno qui."); } }
+
+function hiNote(e){
+  document.querySelectorAll(".n-dot.on,.n-ev.on,.n-note.on").forEach(x => x.classList.remove("on"));
+  if(!e) return;
+  const el = document.querySelector(`.n-ev[data-i="${e.i}"],.n-note[data-i="${e.i}"],.n-dot[data-pos="${e.s+e.f}"]`); if(el) el.classList.add("on");
+}
+function hiBeat(b, n){ const box = document.getElementById("beats"); if(!box) return; if(n && box.children.length !== n) box.innerHTML = "<i></i>".repeat(n); [...box.children].forEach((x,k) => x.classList.toggle("on", k===b)); }
+function hiChord(j){ document.querySelectorAll("#chords span").forEach((x,k) => x.classList.toggle("on", k===j)); }
+
+/* Basi iReal Pro: un file per base, con una battuta di count-in e il finale. Il tempo si cambia con playbackRate (intonazione invariata). */
+const BASE = {a:null, info:null, failed:{}};
+function baseInfo(){ const s = curStep(); if(!s || s.nobase) return null; return BASEMAP[stepKey(V.p.id, V.p.i)] || null; }
+function baseAudio(info){
+  if(!BASE.a){ BASE.a = new Audio(); BASE.a.preload = "auto"; BASE.a.addEventListener("ended", () => { if(P.on && P.cfg && P.cfg.real){ ACT["go-ex"](); } }); }
+  const src = "basi/" + info.file.replace(/\.wav$/, ".mp3");
+  if(BASE.a.getAttribute("src") !== src){ BASE.a.setAttribute("src", src); BASE.a.load(); }
+  BASE.a.preservesPitch = true; BASE.a.mozPreservesPitch = true; BASE.a.webkitPreservesPitch = true;
+  return BASE.a;
+}
+function exCfg(){
+  const s = curStep();
+  if(s.type === "crea") return {bpm:UI.bpm || s.bpm, chords:s.chords, meter:s.meter, swing:s.swing, base:UI.opt.base, click:UI.opt.click, example:false, events:[], onBeat:hiBeat, onChord:hiChord};
+  const parsed = UI.parsed; const chords = parsed.bars.some(b => b.chords) ? parsed.bars.map(b => b.chord) : null;
+  return {bpm:UI.bpm, beats:parsed.beats, bars:parsed.bars, chords, swing:s.swing, base:!!chords && UI.opt.base, click:UI.opt.click, example:UI.opt.example, events:parsed.events, onBeat:hiBeat, onNote:hiNote, onChord:hiChord};
+}
+function startExercise(){
+  const cfg = exCfg(); const info = baseInfo();
+  if(!(info && UI.opt.base && !BASE.failed[info.file])){ P.start(cfg); return; }
+  ac(); const a = baseAudio(info); const rate = cfg.bpm / info.bpm;
+  a.playbackRate = rate; a.currentTime = 0;
+  cfg.base = false; cfg.click = false; cfg.real = true; cfg.info = info; cfg.onStop = () => { a.pause(); };
+  P.cfg = cfg; P.on = true; P.startedAt = Date.now(); /* il pulsante mostra già "Ferma" mentre il file parte */
+  a.play().then(() => {
+    if(!P.on) { a.pause(); return; }
+    P.on = false; P.cfg = null; cfg.at = AC.currentTime - a.currentTime / rate + (AC.outputLatency || 0);
+    P.start(cfg);
+  }).catch(() => { BASE.failed[info.file] = true; P.on = false; P.cfg = null; cfg.real = false; cfg.base = UI.opt.base; cfg.onStop = null; P.start(cfg); toast("Base non disponibile: suona quella sintetica."); });
+}
+const ACT = {
+  go(v){ if(v==="path" || v==="practice" || v==="handbook" || v==="profile"){ if(!S.setup){ S.setup = true; save(); } } go(v); },
+  start(){ S.setup = true; save(); go("path"); },
+  strings(v){ S.strings = +v; save(); rerender(); },
+  lefty(){ S.lefty = !S.lefty; save(); rerender(); },
+  instr(){ UI.instr = true; rerender(); },
+  instrclose(){ UI.instr = false; rerender(); },
+  goal(v){ S.goal = +v; save(); rerender(); },
+  rigor(){ S.rigor = !S.rigor; save(); rerender(); },
+  path(v){ S.path = v; save(); render(); },
+  chapter(v){ if(CONTENT[v]) go("chapter", {id:v}); else toast(`${v} · ${chTitle(v)}: in arrivo, dopo la prova sullo strumento.`); },
+  step(v){ go("step", {id:V.p.id, i:+v}); },
+  exit(){ go("chapter", {id:V.p.id}); },
+  next(){ const s = curStep(); if(s.type === "lezione") markDone(); nextStep(); },
+  view(v){ UI.view = v; rerender(); },
+  reveal(){ UI.reveal = true; rerender(); },
+  qplay(){ const s = curStep(), q = s.questions[UI.q.k]; ac(); const t0 = AC.currentTime + .05;
+    q.play.forEach((m,j) => { const t = q.harm ? t0 : t0 + j*.55; if(m >= 52){ const o = AC.createOscillator(), g = AC.createGain(); o.type = "triangle"; o.frequency.value = hz(m); env(g, t, .01, .2, q.harm ? 1.6 : .6); o.connect(g).connect(AC.destination); o.start(t); o.stop(t + 2); } else bassNote(m, t, q.harm ? 1.6 : .55); }); },
+  opt(v){ UI.opt[v] = !UI.opt[v]; if(P.on){ P.cfg.click = UI.opt.click && !P.cfg.real; P.cfg.example = UI.opt.example; if(P.cfg.real){ if(v==='base' && !UI.opt.base && BASE.a) BASE.a.muted = true; if(v==='base' && UI.opt.base && BASE.a) BASE.a.muted = false; } else P.cfg.base = UI.opt.base && !!P.cfg.chords; } rerender(); },
+  bpm(v){ UI.bpm = Math.min(240, Math.max(30, (UI.bpm || (UI.free && UI.free.bpm) || 60) + (+v))); if(UI.free) UI.free.bpm = UI.bpm; P.setBpm(UI.bpm); if(P.on && P.cfg && P.cfg.real && BASE.a) BASE.a.playbackRate = UI.bpm / P.cfg.info.bpm; const b = document.getElementById("bpmv"); if(b) b.textContent = UI.bpm; },
+  "go-ex"(){
+    if(P.on){ P.stop(); hiNote(null); hiBeat(-1); hiChord(-1); const s = curStep(); if(s.type !== "crea" && P.playedSec > 3){ UI.eval = {r:null, bpm:UI.bpm}; } rerender(); return; }
+    startExercise(); const b = document.getElementById("gobtn"); if(b) b.innerHTML = IC.stop + " Ferma";
+  },
+  freego(){
+    if(P.on){ P.stop(); hiBeat(-1); hiChord(-1); rerender(); return; }
+    const loops = {rock:["A","A","D","E"], pop:["C","G","Am","F"], blues:["E7","A7","E7","B7"]};
+    UI.bpm = UI.free.bpm; P.start({bpm:UI.free.bpm, chords:loops[UI.loop], base:UI.opt.base, click:UI.opt.click, events:[], onBeat:hiBeat, onChord:hiChord});
+    const b = document.getElementById("gobtn"); if(b) b.innerHTML = IC.stop + " Ferma";
+  },
+  loop(v){ P.stop(); UI.loop = v; UI.free = {bpm: {rock:100, pop:84, blues:90}[v]}; rerender(); },
+  ref(v){ ac(); bassNote(OPEN[v], AC.currentTime + .05, 1.6); },
+  er(v){ UI.eval.r = v; rerender(); },
+  ebpm(v){ UI.eval.bpm = Math.max(30, UI.eval.bpm + (+v)); rerender(); },
+  eclose(){ UI.eval = null; rerender(); },
+  esave(){
+    const s = curStep(), k = stepKey(V.p.id, V.p.i), E = UI.eval;
+    (S.evals[k] = S.evals[k] || []).push({r:E.r, bpm:E.bpm, t:Date.now()});
+    if(E.r === "g") S.best[k] = Math.max(S.best[k] || 0, E.bpm);
+    const ok = S.rigor ? (E.r === "g" && E.bpm >= s.bpm[1]) : true; if(ok) S.done[k] = true;
+    save(); UI.eval = null; UI.noPropose = false; rerender();
+    if(!ok) toast(`Salvato. In modalità rigorosa serve “pulito” a ${s.bpm[1]} BPM.`);
+    else if(E.r === "r") toast("Salvato. Polly lo rimette nel ripasso di domani.");
+  },
+  plus5(){ UI.bpm = Math.min(240, UI.bpm + 5); UI.noPropose = true; rerender(); },
+  nopropose(){ UI.noPropose = true; rerender(); },
+  pick(v){ UI.q.sel = +v; rerender(); },
+  qcheck(){ const s = curStep(), Q = UI.q; Q.checked = true; if(Q.sel === s.questions[Q.k].c) Q.score++; rerender(); },
+  qnext(){ const s = curStep(), Q = UI.q; if(Q.k + 1 < s.questions.length){ Q.k++; Q.sel = null; Q.checked = false; } else Q.end = true; rerender(); },
+  quizdone(){ markDone(); nextStep(); },
+  quizretry(){ UI.q = null; rerender(); },
+  chk(v, el){ UI.chk[+v] = el.checked; rerender(); },
+  finish(){ P.stop(); markDone(); nextStep(); },
+  rec(){ toast("La registrazione arriva nell'app: qui il browser non dà accesso al microfono."); },
+  reset(){ const keep = {strings:S.strings, lefty:S.lefty, goal:S.goal, name:S.name, avatar:S.avatar}; S = Object.assign({}, DEF, keep, {setup:true}); save(); toast("Progressi azzerati."); go("profile"); }
+};
+document.getElementById("app").addEventListener("click", e => {
+  const el = e.target.closest("[data-a]"); if(!el || el.disabled) return;
+  if(el.dataset.a === "chk") return;
+  const f = ACT[el.dataset.a]; if(f) f(el.dataset.v, el);
+});
+document.getElementById("app").addEventListener("change", e => {
+  if(e.target.id === "nameIn"){ S.name = e.target.value.trim(); save(); return; }
+  if(e.target.id === "avatarIn" && e.target.files[0]){ const r = new FileReader(); r.onload = () => { const im = new Image(); im.onload = () => { const c = document.createElement("canvas"), n = 256, s = Math.min(im.width, im.height); c.width = c.height = n; c.getContext("2d").drawImage(im, (im.width-s)/2, (im.height-s)/2, s, s, 0, 0, n, n); S.avatar = c.toDataURL("image/jpeg", .85); save(); rerender(); toast("Foto aggiornata!"); }; im.src = r.result; }; r.readAsDataURL(e.target.files[0]); return; } const el = e.target.closest('[data-a="chk"]'); if(el) ACT.chk(el.dataset.v, el); });
+render();
+</script>
+</body>
+</html>
