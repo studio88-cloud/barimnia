@@ -37,3 +37,4 @@ Durate `w h q e s t u` (semibreve … sedicesimo, terzine), segni `x g H P S ~ ^
 Esempio: `[Am] E5q:1 re E5e:1 A7q:5 rq`.
 
 Basi musicali realizzate con iReal Pro.
+# barimnia
