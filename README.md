@@ -38,3 +38,4 @@ Esempio: `[Am] E5q:1 re E5e:1 A7q:5 rq`.
 
 Basi musicali realizzate con iReal Pro.
 # barimnia
+# barimnia
