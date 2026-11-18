@@ -388,11 +388,11 @@ path(){
   P0.ch.forEach((c, i) => {
     const [id, title, lv, req] = c; const st = chState(id);
     const tp = tappa(id, i === curIdx);
-    const reqTxt = req ? `<span class="req">Si apre con ${req}${CONTENT[id] ? " · aperto per la prova" : ""}</span>` : "";
+    const reqTxt = req ? `<span class="req">Completa ${req}${CONTENT[id] ? " · aperto per la prova" : ""}</span>` : "";
     const stTxt = st === "empty" ? `<span class="req">In arrivo</span>` : st === "progress" ? `<span class="req">${chDone(id)}/${CONTENT[id].steps.length} passi</span>` : "";
     html += `<div class="stop" style="transform:translateX(${offs[i%8]}px)"><button class="node tappa ${tp.cls}" data-a="chapter" data-v="${id}" aria-label="${id} ${title}"><img src="${ASSETS['nav_'+tp.img]}" alt="">${tp.label ? `<span class="lbl">${tp.label}</span>` : ""}</button><span class="t"><b class="num">${id}</b> ${title}</span><span class="req">${LEVEL[lv]}</span>${reqTxt}${stTxt}${i === curIdx ? (offs[i%8] > 0 ? `<img class="pathpolly l" src="${ASSETS.polly_think}" alt="Polly ti aspetta qui">` : `<img class="pathpolly r" src="${ASSETS.polly_think_sx}" alt="Polly ti aspetta qui">`) : ""}</div>`;
     if(key === "tecnica") MODULES.filter(m => m.after === id).forEach(m => { const dn = m.ch.filter(x => chState(x[0])==="done").length;
-      html += `<div class="module"><div class="mhead">${IC.branch}<b>Modulo ${m.name}</b><span class="muted small">${dn}/${m.ch.length} · si apre dopo ${id}</span></div><div class="mrow">${m.ch.map(([mid,mt,mlv]) => { const ms = chState(mid); return `<button class="mnode ${ms==='done'?'done':''}" data-a="chapter" data-v="${mid}" aria-label="${mid} ${mt}"><span class="mid tappa ${tappa(mid).cls}"><img src="${ASSETS['nav_'+tappa(mid).img]}" alt="">${tappa(mid).label ? `<span class="lbl">${mid}</span>` : ""}</span><span class="mt"><b class="num">${mid}</b> ${mt}</span><span class="ml">${LEVEL[mlv]}</span></button>`; }).join("")}</div></div>`; });
+      html += `<div class="module"><div class="mhead">${IC.branch}<b>Modulo ${m.name}</b><span class="muted small">${dn}/${m.ch.length} · completa ${id}</span></div><div class="mrow">${m.ch.map(([mid,mt,mlv]) => { const ms = chState(mid); return `<button class="mnode ${ms==='done'?'done':''}" data-a="chapter" data-v="${mid}" aria-label="${mid} ${mt}"><span class="mid tappa ${tappa(mid).cls}"><img src="${ASSETS['nav_'+tappa(mid).img]}" alt="">${tappa(mid).label ? `<span class="lbl">${mid}</span>` : ""}</span><span class="mt"><b class="num">${mid}</b> ${mt}</span><span class="ml">${LEVEL[mlv]}</span></button>`; }).join("")}</div></div>`; });
   });
   return `${header()}<div class="screen"><h1>Percorso</h1>
     <div class="seg" role="tablist">${tabs}</div><div class="path">${html}</div></div>${nav()}`;
@@ -405,7 +405,7 @@ chapter(){
     if(s.bpm && Array.isArray(s.bpm) && best) st = `<span class="st ${done?'ok':''}">${best}/${s.bpm[1]} BPM</span>`;
     return `<button class="step ${s.type==='quiz'?'final':''}" data-a="step" data-v="${i}"><span class="ic">${ic}</span><span class="grow"><span style="display:block">${s.title}</span><span class="muted small">${tl} · ${s.min} min${s.type==='quiz'?' · 80% per chiudere il capitolo':''}</span></span>${st}</button>`;
   }).join("");
-  return `<div class="screen"><div class="topbar"><button class="iconbtn" data-a="go" data-v="path" aria-label="Torna al percorso">${IC.back}</button><div class="grow"><div class="muted small">${id} · ${LEVEL[ALLCH[id][2]]}${ALLCH[id][3] ? ' · si apre con ' + ALLCH[id][3] : ''}</div><h2>${chTitle(id)}</h2></div></div>
+  return `<div class="screen"><div class="topbar"><button class="iconbtn" data-a="go" data-v="path" aria-label="Torna al percorso">${IC.back}</button><div class="grow"><div class="muted small">${id} · ${LEVEL[ALLCH[id][2]]}${ALLCH[id][3] ? ' · completa ' + ALLCH[id][3] : ''}</div><h2>${chTitle(id)}</h2></div></div>
     <div class="row"><div class="bar"><i style="width:${d/n*100}%"></i></div><span class="muted small">${d}/${n}</span></div>
     <div class="steps">${rows}</div></div>${nav()}`;
 },
