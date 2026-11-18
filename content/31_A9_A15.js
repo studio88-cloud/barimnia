@@ -29,7 +29,7 @@ A9:{steps:[
    bars:"[C] A3h:1 E3h:5 | [Am] E5h:1 A7h:5 | [Dm] A5h:1 A0h:5 | [G] E3h:1 D5h:8"},
   {type:"pratica", title:"P1 · Una forma in miniatura", min:7, bpm:[80,110], view:"tab", style:"Pop – Rock",
    task:"Otto battute: A (due), A (due), B (due), A (due). Suonala tutta senza perdere il segno.",
-   bars:"[C] A3q:1 A3q:1 E3q:5 E3q:5 | [G7] E3q:1 E3q:1 D5q:8 D3q:b7 | [C] A3q:1 A3q:1 E3q:5 E3q:5 | [G7] E3q:1 E3q:1 D5q:8 D3q:b7 | [F] E1q:1 E1q:1 A3q:5 A3q:5 | [D7] A5q:1 A5q:1 A4q A0q:5 | [C] A3q:1 A3q:1 E3q:5 E3q:5 | [G7] E3q:1 A2q:3 A5q:5 E3q:1"},
+   bars:"[C] A3q:1 A3q:1 E3q:5 E3q:5 | [G7] E3q:1 E3q:1 D5q:8 D3q:b7 | [C] A3q:1 A3q:1 E3q:5 E3q:5 | [G7] E3q:1 E3q:1 D5q:8 D3q:b7 | [F] E1q:1 E1q:1 A3q:5 A3q:5 | [D7] A5q:1 A5q:1 D4q:3 A0q:5 | [C] A3q:1 A3q:1 E3q:5 E3q:5 | [G7] E3q:1 A2q:3 A5q:5 E3q:1"},
   {type:"quiz", title:"Quiz finale", min:6, questions:[
     {q:"Quante battute ha il blues classico?", o:["12","8","16"], c:0},
     {q:"Nel blues in Mi, qual è il IV7?", o:["A7","B7","D7"], c:0},
