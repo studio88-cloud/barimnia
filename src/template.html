@@ -93,6 +93,15 @@ p{margin:0;line-height:1.5;color:var(--text)}
 .path{display:flex;flex-direction:column;align-items:center;gap:18px;padding:6px 0 10px;position:relative}
 .path > *:not(.trail){position:relative;z-index:1}
 .trail{position:absolute;left:0;top:0;pointer-events:none;z-index:0;overflow:visible}
+.node.tappa{background:none;box-shadow:none;overflow:visible}
+.tappa{position:relative}
+.tappa img{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);pointer-events:none}
+.node.tappa.t-cur img{width:124px}.node.tappa.t-done img,.node.tappa.t-lock img{width:78px}.node.tappa.t-ring img{width:88px}
+.tappa .lbl{position:relative;z-index:1;color:#fff;font-weight:800;font-size:18px}
+.mnode .mid.tappa{background:none;box-shadow:none;width:40px;height:40px}
+.mnode .mid.tappa.t-cur img{width:66px}.mnode .mid.tappa.t-done img,.mnode .mid.tappa.t-lock img{width:41px}.mnode .mid.tappa.t-ring img{width:47px}
+.mnode .mid .lbl{font-size:12px}
+.stop .t .num,.mnode .mt .num{color:var(--lavender);font-weight:800;margin-right:2px}
 .stop{position:relative}
 .pathpolly{position:absolute;top:-8px;width:112px;height:auto;pointer-events:none;animation:pollyfloat 3s ease-in-out infinite}
 .pathpolly.l{left:-74px}.pathpolly.r{left:136px}
@@ -301,6 +310,15 @@ function fmtMin(sec){ const m = Math.round(sec/60); return m < 60 ? m + " min" :
 
 /* ---------- Avanzamento ---------- */
 const stepKey = (ch,i) => ch + "-" + i;
+/* Icone delle tappe (da Musagete): attuale, in corso, completata, padroneggiata, bloccata */
+function mastered(id){ const c = CONTENT[id]; if(!c) return false; return c.steps.every((s,i) => !(Array.isArray(s.bpm)) || (S.best[stepKey(id,i)]||0) >= s.bpm[1]); }
+function tappa(id, current){
+  const st = chState(id);
+  if(st === "empty") return {img:"tappa_stato_bloccata", cls:"t-lock", label:""};
+  if(st === "done") return mastered(id) ? {img:"tappa_completata_anello", cls:"t-ring", label:""} : {img:"tappa_completata_base", cls:"t-done", label:""};
+  if(st === "progress" || current) return {img:"tappa_attuale_progress", cls:"t-cur", label:id};
+  return {img:"tappa_attuale_base", cls:"t-cur", label:id};
+}
 function chState(id){
   const c = CONTENT[id]; if(!c) return "empty";
   const n = c.steps.filter((s,i) => S.done[stepKey(id,i)]).length;
@@ -369,13 +387,12 @@ path(){
   const curIdx = P0.ch.findIndex(c => CONTENT[c[0]] && chState(c[0]) !== "done");
   P0.ch.forEach((c, i) => {
     const [id, title, lv, req] = c; const st = chState(id);
-    const lock = st === "empty" ? `<span class="lock">${IC.lock}</span>` : "";
-    const label = st === "done" ? IC.check.replace('<svg','<svg width="30" height="30"') : id;
+    const tp = tappa(id, i === curIdx);
     const reqTxt = req ? `<span class="req">Si apre con ${req}${CONTENT[id] ? " · aperto per la prova" : ""}</span>` : "";
     const stTxt = st === "empty" ? `<span class="req">In arrivo</span>` : st === "progress" ? `<span class="req">${chDone(id)}/${CONTENT[id].steps.length} passi</span>` : "";
-    html += `<div class="stop" style="transform:translateX(${offs[i%8]}px)"><button class="node ${st==='done'?'done':st==='empty'?'empty':''}" data-a="chapter" data-v="${id}" aria-label="${id} ${title}">${label}${lock}</button><span class="t">${title}</span><span class="req">${LEVEL[lv]}</span>${reqTxt}${stTxt}${i === curIdx ? (offs[i%8] > 0 ? `<img class="pathpolly l" src="${ASSETS.polly_think}" alt="Polly ti aspetta qui">` : `<img class="pathpolly r" src="${ASSETS.polly_think_sx}" alt="Polly ti aspetta qui">`) : ""}</div>`;
+    html += `<div class="stop" style="transform:translateX(${offs[i%8]}px)"><button class="node tappa ${tp.cls}" data-a="chapter" data-v="${id}" aria-label="${id} ${title}"><img src="${ASSETS['nav_'+tp.img]}" alt="">${tp.label ? `<span class="lbl">${tp.label}</span>` : ""}</button><span class="t"><b class="num">${id}</b> ${title}</span><span class="req">${LEVEL[lv]}</span>${reqTxt}${stTxt}${i === curIdx ? (offs[i%8] > 0 ? `<img class="pathpolly l" src="${ASSETS.polly_think}" alt="Polly ti aspetta qui">` : `<img class="pathpolly r" src="${ASSETS.polly_think_sx}" alt="Polly ti aspetta qui">`) : ""}</div>`;
     if(key === "tecnica") MODULES.filter(m => m.after === id).forEach(m => { const dn = m.ch.filter(x => chState(x[0])==="done").length;
-      html += `<div class="module"><div class="mhead">${IC.branch}<b>Modulo ${m.name}</b><span class="muted small">${dn}/${m.ch.length} · si apre dopo ${id}</span></div><div class="mrow">${m.ch.map(([mid,mt,mlv]) => { const ms = chState(mid); return `<button class="mnode ${ms==='done'?'done':''}" data-a="chapter" data-v="${mid}" aria-label="${mid} ${mt}"><span class="mid">${ms==='done'?IC.check:mid}</span><span class="mt">${mt}</span><span class="ml">${LEVEL[mlv]}</span></button>`; }).join("")}</div></div>`; });
+      html += `<div class="module"><div class="mhead">${IC.branch}<b>Modulo ${m.name}</b><span class="muted small">${dn}/${m.ch.length} · si apre dopo ${id}</span></div><div class="mrow">${m.ch.map(([mid,mt,mlv]) => { const ms = chState(mid); return `<button class="mnode ${ms==='done'?'done':''}" data-a="chapter" data-v="${mid}" aria-label="${mid} ${mt}"><span class="mid tappa ${tappa(mid).cls}"><img src="${ASSETS['nav_'+tappa(mid).img]}" alt="">${tappa(mid).label ? `<span class="lbl">${mid}</span>` : ""}</span><span class="mt"><b class="num">${mid}</b> ${mt}</span><span class="ml">${LEVEL[mlv]}</span></button>`; }).join("")}</div></div>`; });
   });
   return `${header()}<div class="screen"><h1>Percorso</h1>
     <div class="seg" role="tablist">${tabs}</div><div class="path">${html}</div></div>${nav()}`;
