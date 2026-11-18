@@ -2939,9 +2939,9 @@ crea(s, id, i){
 
 function exView(s, id, i){
   const k = stepKey(id,i); const parsed = UI.parsed || (UI.parsed = parseBars(s.bars, s.meter));
-  UI.view = UI.view || s.view; UI.bpm = UI.bpm || s.bpm[0];
+  UI.view = UI.view || "tab"; UI.bpm = UI.bpm || s.bpm[0];
   const best = S.best[k];
-  const views = [["pallini","Pallini"],["tab","Tab"],["staff","Pentagramma"]];
+  const views = [["tab","Tab"],["staff","Pentagramma"],["pallini","Pallini"]];
   let not = UI.view === "pallini" ? svgBoard(parsed.events) : UI.view === "tab" ? svgTab(parsed, {rh:s.rh}) : svgStaff(parsed, {flats:s.flats, swing:s.swing});
   if(s.hide && !UI.reveal) not = `<div style="padding:22px 8px;text-align:center"><p class="muted small" style="margin-bottom:10px">La soluzione è nascosta: prima trovala a orecchio sullo strumento.</p><button class="btn sm secondary" data-a="reveal">Mostra la soluzione</button></div>`;
   if(s.hide && UI.exInit !== k){ UI.opt = UI.opt || {click:true, example:false, base:true}; UI.opt.example = true; UI.exInit = k; }
