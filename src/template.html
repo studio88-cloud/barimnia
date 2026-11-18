@@ -90,7 +90,9 @@ p{margin:0;line-height:1.5;color:var(--text)}
 .switch.on{background:var(--violet)}
 .switch.on::after{left:25px}
 /* Percorso */
-.path{display:flex;flex-direction:column;align-items:center;gap:18px;padding:6px 0 10px}
+.path{display:flex;flex-direction:column;align-items:center;gap:18px;padding:6px 0 10px;position:relative}
+.path > *:not(.trail){position:relative;z-index:1}
+.trail{position:absolute;left:0;top:0;pointer-events:none;z-index:0;overflow:visible}
 .stop{display:flex;flex-direction:column;align-items:center;gap:6px;width:180px;text-align:center}
 .node{width:76px;height:76px;border-radius:50%;border:0;background:var(--violet);box-shadow:0 5px 0 var(--violet-dark);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;position:relative}
 .node.done{background:var(--gold);box-shadow:0 5px 0 #8f7a45;color:#1B1428}
@@ -317,9 +319,9 @@ function instrSheet(){ return `<div class="veil"><div class="sheet" role="dialog
 const SCREENS = {
 welcome(){
   return `<div class="screen center" style="gap:18px">
-    ${pollySay("basso","Ehi, io sono Polly! Tu porti il basso, io porto il groove.", true)}
+    ${pollySay("basso","Sono Polly, la tua compagna di groove. Si suona?", true)}
     <img class="logo-big" src="${ASSETS.logo}" alt="Barimnia">
-    <p class="muted">Il basso si impara suonando. Pochi minuti al giorno, sul tuo strumento, al tuo ritmo.</p>
+    <p class="muted" style="line-height:1.6">Il basso si impara suonando.<br>Pochi minuti al giorno,<br>sul tuo strumento, al tuo ritmo.</p>
     <div class="stack" style="margin-top:8px"><button class="btn primary" data-a="go" data-v="bass">Si parte!</button></div>
     <p class="proto">Prototipo: i dati restano in questo browser.</p></div>`;
 },
@@ -513,7 +515,25 @@ function render(){
   const app = document.getElementById("app");
   app.innerHTML = SCREENS[V.screen]() + (UI.eval ? evalSheet() : "") + (UI.instr ? instrSheet() : "");
   const sc = app.querySelector(".screen"); if(sc && UI.scroll){ sc.scrollTop = UI.scroll; UI.scroll = 0; }
+  if(V.screen === "path") requestAnimationFrame(drawTrail);
 }
+/* Traccia del percorso: una linea curva che collega i capitoli, piena fin dove sei arrivato */
+function drawTrail(){
+  const box = document.querySelector(".path"); if(!box) return;
+  const old = box.querySelector(".trail"); if(old) old.remove();
+  const b = box.getBoundingClientRect();
+  const nodes = [...box.querySelectorAll(".stop .node")]; if(nodes.length < 2) return;
+  const pts = nodes.map(n => { const r = n.getBoundingClientRect(); return [r.left - b.left + r.width/2, r.top - b.top + r.height/2, n.classList.contains("done")]; });
+  let d = `M${pts[0][0]} ${pts[0][1]}`, dDone = ""; let lastDone = -1; pts.forEach((p,i) => { if(p[2]) lastDone = i; });
+  const seg = (a, c) => { const my = (a[1] + c[1]) / 2; return ` C${a[0]} ${my} ${c[0]} ${my} ${c[0]} ${c[1]}`; };
+  for(let i = 1; i < pts.length; i++) d += seg(pts[i-1], pts[i]);
+  if(lastDone > 0){ dDone = `M${pts[0][0]} ${pts[0][1]}`; for(let i = 1; i <= lastDone; i++) dDone += seg(pts[i-1], pts[i]); }
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("class", "trail"); svg.setAttribute("width", b.width); svg.setAttribute("height", box.scrollHeight);
+  svg.innerHTML = `<path d="${d}" fill="none" stroke="var(--border)" stroke-width="8" stroke-linecap="round" stroke-dasharray="2 16"/>` + (dDone ? `<path d="${dDone}" fill="none" stroke="var(--gold)" stroke-width="8" stroke-linecap="round" stroke-dasharray="2 16"/>` : "");
+  box.prepend(svg);
+}
+window.addEventListener("resize", () => { if(V.screen === "path") drawTrail(); });
 function go(screen, p){ P.stop(); UI = {}; V = {screen, p: p || {}}; render(); const sc = document.querySelector(".screen"); if(sc) sc.scrollTop = 0; }
 function rerender(){ const sc = document.querySelector(".screen"); UI.scroll = sc ? sc.scrollTop : 0; render(); }
 function curStep(){ return CONTENT[V.p.id].steps[V.p.i]; }
