@@ -75,8 +75,8 @@ A10:{steps:[
 ]},
 A11:{steps:[
   {type:"lezione", title:"Una scala, sette modi", min:5, polly:["maestra","Stesse note, punto di partenza diverso: sette colori da una sola tavolozza."],
-   text:["Partendo da ogni nota della scala maggiore si ottiene un modo: ionico (I), dorico (II), frigio (III), lidio (IV), misolidio (V), eolio (VI), locrio (VII). In Do: Do ionico, Re dorico, Mi frigio, Fa lidio, Sol misolidio, La eolio, Si locrio.","Ogni modo ha una nota caratteristica: dorico la 6 maggiore, frigio la ♭2, lidio la ♯4, misolidio la ♭7, locrio la ♭5."],
-   remember:"Dorico 6 · frigio ♭2 · lidio ♯4 · misolidio ♭7 · locrio ♭5."},
+   text:["Partendo da ogni nota della scala maggiore si ottiene un modo: ionico (I), dorico (II), frigio (III), lidio (IV), misolidio (V), eolio (VI), locrio (VII). In Do: Do ionico, Re dorico, Mi frigio, Fa lidio, Sol misolidio, La eolio, Si locrio.","Ogni modo ha le sue note caratteristiche: dorico la 6 maggiore, frigio la ♭2, lidio la ♯4, misolidio la ♭7, locrio la ♭2 e la ♭5."],
+   remember:"Dorico 6 · frigio ♭2 · lidio ♯4 · misolidio ♭7 · locrio ♭2 e ♭5."},
   {type:"lezione", title:"Quale modo su quale accordo", min:4, polly:["pensierosa","L'accordo ti dice il modo, come la sigla ti dice la fondamentale."],
    text:["Ogni accordo della scala armonizzata ha il suo modo: maj7 → ionico o lidio, m7 → dorico (o eolio, o frigio), 7 → misolidio, m7♭5 → locrio.","Il dorico è il modo minore più usato in funk, jazz e fusion: la sesta maggiore lo rende meno triste dell'eolio."],
    remember:"maj7 ionico/lidio · m7 dorico · 7 misolidio · ø locrio."},
