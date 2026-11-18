@@ -33,7 +33,14 @@ body{background:#120D1C;color:var(--text);font-family:var(--font);font-weight:60
 button{font-family:inherit;font-weight:700;color:inherit;cursor:pointer}
 :focus-visible{outline:2px solid var(--lavender);outline-offset:2px}
 .phone{width:390px;height:844px;max-height:100%;max-width:100%;background:var(--bg);border-radius:28px;border:1px solid var(--border);overflow:hidden;display:flex;flex-direction:column;position:relative}
-@media (max-width:440px),(max-height:720px){.phone{border:0;border-radius:0;width:100%;height:100%}}
+@media (max-width:440px),(max-height:720px){
+  html,body{background:var(--bg)}
+  .phone{border:0;border-radius:0;position:fixed;inset:0;width:auto;height:auto;max-height:none;padding-top:env(safe-area-inset-top);padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+  .nav{padding-bottom:calc(6px + env(safe-area-inset-bottom))}
+  .sheet{padding-bottom:calc(22px + env(safe-area-inset-bottom))}
+  #app > .screen:not(:has(~ .nav)){padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  #app > .screen:not(:has(~ .nav)) .sticky{bottom:calc(-24px - env(safe-area-inset-bottom))}
+}
 .screen{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 16px 24px;display:flex;flex-direction:column;gap:14px}
 .screen > *{flex-shrink:0}
 .btn svg,.round svg{width:20px;height:20px;flex:none}
