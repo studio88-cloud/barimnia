@@ -512,8 +512,8 @@ T4:{steps:[
    task:"Dalla corda Sol alla corda Mi con un solo dito che “cade” di corda in corda, poi ricomincia. Ascolta che la nota precedente si fermi.",
    tip:"Prova sia con l'indice sia con il medio: uno dei due ti verrà più naturale.",
    bars:"G5e D5e A5e E5e G5e D5e A5e E5e | G7e D7e A7e E7e G7e D7e A7e E7e | G5e D5e A5e E5e G5e D5e A5e E5e | G3e D3e A3e E3e G3e D3e A3e E3e"},
-  {type:"strumento", title:"E4 · Note morte", min:5, bpm:[60,90], view:"tab",
-   task:"La “x” è una nota morta: il dito sinistro appoggia senza premere e la destra pizzica. Esce un “tac” senza intonazione.",
+  {type:"strumento", title:"E4 · Ghost notes", min:5, bpm:[60,90], view:"tab",
+   task:"La “x” è una ghost note: il dito sinistro appoggia senza premere e la destra pizzica. Esce un “tac” senza intonazione.",
    bars:"A5e A5ex A5e A5ex A5e A5ex A5e A5ex | D5e D5ex D5e D5ex D5e D5ex D5e D5ex | A5q A5ex A5ex A5q A5ex A5ex | D5q D5ex D5ex D5q rq"},
   {type:"pratica", title:"P1 · Groove pulito", min:6, bpm:[60,76], view:"tab", style:"Pop – Rock",
    task:"Note corte e pause pulite su un giro pop. La differenza tra suonato e muto deve sentirsi bene.",
@@ -523,8 +523,8 @@ T4:{steps:[
     {q:"Per fermare una nota premuta, il dito sinistro…", o:["Si alleggerisce restando sulla corda","Si stacca","Preme di più"], c:0},
     {q:"Con la mano destra, il pollice può…", o:["Tenere ferme le corde gravi","Accordare","Solo appoggiarsi al corpo"], c:0},
     {q:"Esiste un solo modo giusto di appoggiare il pollice destro?", o:["Sì, sul pickup","No, conta che il suono sia pulito","Sì, sulla corda Mi"], c:1},
-    {q:"Cosa indica una “x” in tablatura?", o:["Una nota morta","Una nota da ripetere","Un armonico"], c:0},
-    {q:"Una nota morta si ottiene…", o:["Appoggiando senza premere","Premendo forte","Pizzicando vicino al ponte"], c:0},
+    {q:"Cosa indica una “x” in tablatura?", o:["Una ghost note","Una nota da ripetere","Un armonico"], c:0},
+    {q:"Una ghost note si ottiene…", o:["Appoggiando senza premere","Premendo forte","Pizzicando vicino al ponte"], c:0},
     {q:"Il raking si usa quando…", o:["Si scende verso una corda più grave","Si sale di corda","Si suona lo slap"], c:0},
     {q:"Durante una pausa di semiminima, la corda…", o:["Resta ferma","Continua a vibrare","Si suona piano"], c:0}]}
 ]},
@@ -606,7 +606,7 @@ T6:{steps:[
     {q:"Hammer-on: dove va il dito che martella?", o:["Su un tasto più alto della stessa corda","Su un'altra corda","Sul tasto più basso"], c:0},
     {q:"Pull-off: cosa fa il dito che lascia la corda?", o:["La tira leggermente di lato","Si alza dritto","Preme più forte"], c:0},
     {q:"In tab, “/” tra due note indica…", o:["Uno slide in salita","Un pull-off","Una pausa"], c:0},
-    {q:"Il vibrato si usa soprattutto…", o:["Sulle note lunghe","Su tutte le note","Sulle note morte"], c:0},
+    {q:"Il vibrato si usa soprattutto…", o:["Sulle note lunghe","Su tutte le note","Sulle ghost notes"], c:0},
     {q:"In un hammer-on conta di più…", o:["La velocità e la precisione del dito","La forza","Il volume dell'amplificatore"], c:0},
     {q:"Nel groove P1, quale nota arriva con lo slide?", o:["Fa♯ (Re 4° tasto)","Si (La 2° tasto)","Mi a vuoto"], c:0},
     {q:"Hammer-on e pull-off di seguito sulla stessa corda si chiamano…", o:["Trillo","Slap","Raking"], c:0},
@@ -617,8 +617,8 @@ T7:{steps:[
    text:["Il sedicesimo dura un quarto di battito: ce ne stanno quattro in ogni battito. Si contano “1 e & a, 2 e & a…”.","Le figure più usate nel funk mescolano ottavi e sedicesimi: ottavo e due sedicesimi, due sedicesimi e ottavo, ottavo puntato e sedicesimo."],
    remember:"4 sedicesimi = 1 battito. Si contano 1 e & a."},
   {type:"lezione", title:"Ghost notes", min:4, polly:["cuffie","Le ghost notes non si vedono quasi, ma si sentono eccome."],
-   text:["Le ghost notes sono note leggerissime o senza intonazione: riempiono gli spazi del groove e lo fanno “respirare”.","Due modi: una nota morta (dito sinistro appoggiato senza premere, “x”) oppure una nota vera suonata pianissimo, tra parentesi. L'accento (>) invece fa risaltare una nota."],
-   remember:"x = nota morta · (5) = ghost note leggera · > = accento."},
+   text:["Le ghost notes sono note leggerissime o senza intonazione: riempiono gli spazi del groove e lo fanno “respirare”.","Due modi: una ghost note stoppata (dito sinistro appoggiato senza premere, “x”) oppure una nota vera suonata pianissimo, tra parentesi. L'accento (>) invece fa risaltare una nota."],
+   remember:"x = ghost note stoppata · (5) = ghost note intonata · > = accento."},
   {type:"app", title:"Conta i sedicesimi", min:2, questions:[
     {q:"Quanti sedicesimi stanno in una battuta di 4/4?", o:["8","12","16","32"], c:2},
     {q:"Ottavo puntato più sedicesimo fanno…", o:["Mezzo battito","Un battito","Due battiti"], c:1},
@@ -629,17 +629,17 @@ T7:{steps:[
   {type:"strumento", title:"E2 · Accenti", min:4, bpm:[50,80], view:"staff",
    task:"Sedicesimi con l'accento, prima sul battito, poi sulla “e”, poi sulla “&”, poi sulla “a”. Le altre note piano.",
    bars:`${R("A5s^ A5s A5s A5s",4)} | ${R("A5s A5s^ A5s A5s",4)} | ${R("A5s A5s A5s^ A5s",4)} | ${R("A5s A5s A5s A5s^",4)}`},
-  {type:"strumento", title:"E3 · Note morte nel groove", min:5, bpm:[60,90], view:"tab",
-   task:"Le “x” sono note morte: stessa mano, stessa corda, il dito sinistro appena appoggiato.",
+  {type:"strumento", title:"E3 · Ghost notes nel groove", min:5, bpm:[60,90], view:"tab",
+   task:"Le “x” sono ghost notes: stessa mano, stessa corda, il dito sinistro appena appoggiato.",
    bars:"A5q A5sx A5sx A5e A5q A5sx A5sx A5e | D5q D5sx D5sx D5e D5q D5sx D5sx D5e | A5e A5sx A5s A5e A5sx A5s A5e A5sx A5s A5q | A5e. A5s A5e. A5s A5q A5q"},
   {type:"strumento", title:"E4 · Le figure del funk", min:5, bpm:[60,90], view:"staff",
    task:"Una battuta per figura: ottavo e due sedicesimi, due sedicesimi e ottavo, sedicesimo-ottavo-sedicesimo, ottavo puntato e sedicesimo.",
    bars:`${R("A5e A5s A5s",4)} | ${R("A5s A5s A5e",4)} | ${R("A5s A5e A5s",4)} | ${R("A5e. A5s",4)}`},
   {type:"lezione", title:"Il funk con le dita", min:3, polly:["salto","Meno note, più pancia. Il funk è nello spazio."],
-   text:["Un groove funk vive di contrasti: note accentate, note morte, pause. La fondamentale sul primo battito è il punto fermo; tutto il resto gira intorno.","Suona corto e preciso: nel funk le note lunghe sono rare."],
+   text:["Un groove funk vive di contrasti: note accentate, ghost notes, pause. La fondamentale sul primo battito è il punto fermo; tutto il resto gira intorno.","Suona corto e preciso: nel funk le note lunghe sono rare."],
    remember:"L'“uno” è sacro. Il resto è spazio, accenti e ghost notes."},
   {type:"pratica", title:"P1 · Groove funk", min:7, bpm:[70,96], view:"tab", style:"Pop – Funk",
-   task:"Un groove su E7 e A7 con note morte, accenti e la nota blues (il ♯9). Tienilo in loop finché non suona “facile”.",
+   task:"Un groove su E7 e A7 con ghost notes, accenti e la nota blues (il ♯9). Tienilo in loop finché non suona “facile”.",
    bars:"[E7] E0e^:1 D2sx E0s:1 D0e:b7 D2s:8 E0s:1 rs E0s:1 G0s:#9 G1s:3 D2e:8 E0e:1 | [E7] E0e^:1 D2sx E0s:1 D0e:b7 D2s:8 E0s:1 rs E0s:1 G0s:#9 G1s:3 D2e:8 E0e:1 | [A7] A0e^:1 G2sx A0s:1 G0e:b7 G2s:8 A0s:1 rs A0s:1 A3s:#9 A4s:3 G2e:8 A0e:1 | [E7] E0e^:1 D2sx E0s:1 D0e:b7 D2s:8 E0s:1 rs E0s:1 G0s:#9 G1s:3 A2e:5 A0e:4"},
   {type:"quiz", title:"Quiz finale", min:5, questions:[
     {q:"Quanti sedicesimi in un battito?", o:["2","3","4","8"], c:2},
@@ -649,7 +649,7 @@ T7:{steps:[
     {q:"Nel funk, la nota più importante di solito è…", o:["La fondamentale sull'uno","L'ultima della battuta","La nota più acuta"], c:0},
     {q:"La “&” nel conteggio dei sedicesimi corrisponde a…", o:["Metà del battito","L'inizio del battito","L'ultimo sedicesimo"], c:0},
     {q:"Su E7, il Sol a vuoto (G) suona come…", o:["♯9, la nota blues","Fondamentale","Quinta"], c:0},
-    {q:"Una nota morta ha un'intonazione precisa?", o:["No","Sì","Solo a vuoto"], c:0}]}
+    {q:"Una ghost note “x” ha un'intonazione precisa?", o:["No","Sì","Solo a vuoto"], c:0}]}
 ]},
 T8:{steps:[
   {type:"lezione", title:"Cambiare posizione", min:3, polly:["salto","Il manico è lungo: usiamolo tutto."],
@@ -883,14 +883,14 @@ S1:{steps:[
    task:"Pollice con pause precise: la sinistra (o il palmo destro) ferma la nota nella pausa.",
    bars:"E0eT re E0eT re E0eT re E0eT re | A0eT re A0eT re A0eT re A0eT re | E5eT re E5eT E5eT re E5eT E5qT | E3eT re E3eT E3eT re E3eT E0qT"},
   {type:"strumento", title:"E3 · Ottave col pollice", min:5, bpm:[60,90], view:"tab",
-   task:"Il pollice colpisce la nota grave sulla corda Mi o La. Le note “x” sono note morte col pollice: rendono il groove percussivo.",
+   task:"Il pollice colpisce la nota grave sulla corda Mi o La. Le note “x” sono ghost notes col pollice: rendono il groove percussivo.",
    bars:"E5eT E5exT E5eT E5exT E7eT E7exT E7eT E7exT | A5eT A5exT A5eT A5exT A7eT A7exT A7eT A7exT | E5eT E5exT E5eT E5exT E3eT E3exT E3eT E3exT | E0qT E0exT E0eT E0hT"},
   {type:"pratica", title:"P1 · Primo groove col pollice", min:6, bpm:[70,100], view:"tab", style:"Pop – Funk",
-   task:"Solo pollice, con note morte e pause. Prima lento, poi con la base.",
+   task:"Solo pollice, con ghost notes e pause. Prima lento, poi con la base.",
    bars:"[E7] E0eT:1 E0exT E0eT:1 re E0eT:1 E3eT:#9 E0qT:1 | [E7] E0eT:1 E0exT E0eT:1 re E0eT:1 re E5eT:4 E7eT:5 | [A7] A0eT:1 A0exT A0eT:1 re A0eT:1 re A0qT:1 | [E7] E0eT:1 E0exT E0eT:1 re E7eT:5 E5eT:4 E0qT:1"},
   {type:"quiz", title:"Quiz finale", min:4, questions:[
     {q:"In tab, cosa indica T sotto una nota?", o:["Pollice","Tapping","Terzina"], c:0},
-    {q:"Una nota morta col pollice produce…", o:["Un colpo percussivo","Una nota lunga","Un armonico"], c:0},
+    {q:"Una ghost note col pollice produce…", o:["Un colpo percussivo","Una nota lunga","Un armonico"], c:0},
     {q:"Chi smorza le corde che non suonano nello slap?", o:["La sinistra, aiutata dal palmo destro","Nessuno","Il ponte"], c:0},
     {q:"Esiste un'unica angolazione corretta del pollice?", o:["No, conta il suono","Sì, a 90 gradi","Sì, parallelo alle corde"], c:0},
     {q:"Su E7, il La al 5° tasto della corda Mi è…", o:["La quarta","La quinta","La terza"], c:0},
@@ -901,7 +901,7 @@ S2:{steps:[
    text:["Il pop si fa agganciando la corda con l'indice (o il medio) e tirandola leggermente verso l'esterno: lasciandola, sbatte sui tasti con un suono brillante.","Non serve tirare forte: basta poco per un suono chiaro. Si usa soprattutto sulle corde Re e Sol."],
    remember:"P = pop. Aggancia poco, tira poco, lascia."},
   {type:"lezione", title:"Pollice e pop", min:3, polly:["salto","Tum-pa, tum-pa: il dialogo più famoso del basso."],
-   text:["La combinazione classica: pollice sulla nota grave, pop sull'ottava. La mano ruota: il pollice scende, l'indice sale.","Le ghost notes della sinistra (note morte suonate con un colpo della mano sulle corde) riempiono gli spazi tra pollice e pop."],
+   text:["La combinazione classica: pollice sulla nota grave, pop sull'ottava. La mano ruota: il pollice scende, l'indice sale.","Le ghost notes della sinistra (un colpo della mano sulle corde, senza intonazione) riempiono gli spazi tra pollice e pop."],
    remember:"Pollice in basso, pop in alto: la mano ruota come una maniglia."},
   {type:"app", title:"Pop", min:2, questions:[
     {q:"In tab, P sotto una nota indica…", o:["Pop","Pull-off","Plettro"], c:0},
@@ -914,7 +914,7 @@ S2:{steps:[
    task:"Pollice sulla fondamentale, pop sull'ottava, a ottavi.",
    bars:`${R("E5eT D7eO",4)} | ${R("A5eT G7eO",4)} | ${R("E3eT D5eO",4)} | ${R("E5eT D7eO",2)} E5qT D7qO`},
   {type:"strumento", title:"E3 · Ottave con ghost", min:5, bpm:[60,100], view:"tab",
-   task:"Tra pollice e pop una nota morta col pollice: tum-x-pa-x.",
+   task:"Tra pollice e pop una ghost note col pollice: tum-x-pa-x.",
    bars:`${R("E5sT E5sxT D7sO E5sxT",4)} | ${R("A5sT A5sxT G7sO A5sxT",4)} | ${R("E3sT E3sxT D5sO E3sxT",4)} | ${R("E5sT E5sxT D7sO E5sxT",2)} E5qT D7qO`},
   {type:"pratica", title:"P1 · Groove disco", min:7, bpm:[90,118], view:"tab", style:"Pop – Disco",
    task:"Ottave pollice-pop a ottavi su un giro disco. Note corte, pause pulite.",
@@ -924,7 +924,7 @@ S2:{steps:[
     {q:"Nell'ottava pollice-pop, il pop suona…", o:["L'ottava","La quinta","La fondamentale grave"], c:0},
     {q:"Per un buon pop serve tirare la corda…", o:["Poco","Molto","Fino a romperla"], c:0},
     {q:"Su Dm7, il Re al 7° tasto della corda Sol è…", o:["L'ottava","La terza","La settima"], c:0},
-    {q:"“Tum-x-pa-x”: la x è…", o:["Una nota morta","Un armonico","Una pausa lunga"], c:0},
+    {q:"“Tum-x-pa-x”: la x è…", o:["Una ghost note","Un armonico","Una pausa lunga"], c:0},
     {q:"Il groove disco P1 usa…", o:["Ottave","Accordi","Armonici"], c:0}]}
 ]},
 S3:{steps:[
@@ -1978,7 +1978,7 @@ L5:{steps:[
 ]},
 L6:{steps:[
   {type:"lezione", title:"Il funk con le dita", min:4, polly:["salto","Uno forte, il resto leggero: il funk è dinamica."],
-   text:["Il funk con le dita vive di sedicesimi, ghost notes e accenti. La fondamentale sull'“uno” è sacra; il resto è un dialogo di note piene, note morte e pause.","Il volume conta: le note piene suonano decise, le ghost appena accennate. Più contrasto c'è, più il groove “spinge”."],
+   text:["Il funk con le dita vive di sedicesimi, ghost notes e accenti. La fondamentale sull'“uno” è sacra; il resto è un dialogo di note piene, ghost notes e pause.","Il volume conta: le note piene suonano decise, le ghost appena accennate. Più contrasto c'è, più il groove “spinge”."],
    remember:"L'uno è sacro · contrasto tra note piene e ghost."},
   {type:"lezione", title:"R&B e soul", min:4, polly:["cuffie","Groove morbido e profondo: suona dietro il battito, non davanti."],
    text:["Nell'R&B e nel soul il basso è più melodico e rilassato: usa le note degli accordi di settima (♭3, ♭7, 9) e spesso suona leggermente “dietro” il battito, con un tocco pieno e caldo.","Sui giri m7-7 (come Dm7-G7) la terza e la settima di ogni accordo creano piccole melodie molto efficaci."],
@@ -1993,7 +1993,7 @@ L6:{steps:[
    recipe:{base:"E7 · E7 · A7 · E7, funk, 96 BPM", ing:"Fondamentale, ottava, ♭7, ♯9 (Sol) e ghost notes; sedicesimi.",
      rules:["L'“uno” sempre sulla fondamentale, accentato.","Almeno due ghost notes per battuta.","Nella battuta 4 un piccolo fill a sedicesimi."],
      goal:"Un groove di una battuta ripetuto 8 volte, con il fill alla fine.", help:"Su E7: Mi (a vuoto) · Re (Re a vuoto) · Sol (Sol a vuoto) · Sol♯ (Sol 1)."},
-   checklist:["L'uno era sempre forte e preciso?","C'erano ghost notes?","Le note piene e quelle morte si distinguevano?","Il fill tornava sull'uno?"]},
+   checklist:["L'uno era sempre forte e preciso?","C'erano ghost notes?","Le note piene e le ghost notes si distinguevano?","Il fill tornava sull'uno?"]},
   {type:"crea", title:"C2 · Il tuo R&B", min:8, bpm:92, chords:["Dm7","G7","Dm7","G7"], style:"Pop – RnB",
    recipe:{base:"Dm7 · G7 · Dm7 · G7, R&B, 92 BPM", ing:"Note degli accordi di settima: 1, ♭3, 5, ♭7, e la 3 di G7.",
      rules:["Ogni battuta inizia con la fondamentale.","Collega la ♭7 di Dm7 (Do) alla 3 di G7 (Si).","Suona morbido, leggermente dietro il battito."],
@@ -2119,7 +2119,7 @@ L10:{steps:[
   {type:"quiz", title:"Quiz finale", min:5, questions:[
     {q:"Nella son clave 3-2, quanti colpi ha la prima battuta?", o:["3","2","4"], c:0},
     {q:"Nel tumbao, l'uno è…", o:["Vuoto","Accentato","Sulla quinta"], c:0},
-    {q:"Il 4 del tumbao suona…", o:["La fondamentale dell'accordo successivo","La terza","Una nota morta"], c:0},
+    {q:"Il 4 del tumbao suona…", o:["La fondamentale dell'accordo successivo","La terza","Una ghost note"], c:0},
     {q:"Il cha-cha-chá ha note su…", o:["1, 3 e 3e","2 e 4","Tutti i sedicesimi"], c:0},
     {q:"Il songo mescola il tumbao con…", o:["Il funk","Il valzer","Il blues lento"], c:0},
     {q:"Su F, il Do al 3° tasto della corda La è…", o:["La quinta","La terza","La settima"], c:0}]}
@@ -2459,7 +2459,7 @@ function strings(){ return S.strings===4 ? ["G","D","A","E"] : S.strings===5 ? [
 /* Notazione compatta:
    corda+tasto+durata[.][segni][:grado]
    durate: w semibreve · h minima · q semiminima · e ottavo · s sedicesimo · t ottavo di terzina · u semiminima di terzina; "." = puntata
-   segni: x nota morta · g ghost note · H hammer-on · P pull-off · S slide · ~ vibrato · ^ accento · T pollice · O pop · Q tapping · * armonico naturale · A armonico artificiale
+   segni: x ghost note stoppata · g ghost note intonata · H hammer-on · P pull-off · S slide · ~ vibrato · ^ accento · T pollice · O pop · Q tapping · * armonico naturale · A armonico artificiale
    gradi: :1 :b3 :3 :5 :b7 :8 :9 …   pause: rq, re., rs …   [Sigla] all'inizio della battuta   {7/8} oppure {7/8:2+2+3} cambia il tempo */
 const DUR = {w:4, h:2, q:1, e:0.5, s:0.25, t:1/3, u:2/3};
 const HARM = {12:12, 7:19, 19:19, 5:24, 24:24, 4:28, 9:28, 16:28, 3:31};
@@ -2567,6 +2567,17 @@ function svgTab(parsed, opt){
     if(b.meterChange || (bi===0 && b.meter.txt!=="4/4")) g += `<text x="${bx+4}" y="${top+(n-1)*gap+13}" font-size="10" font-weight="800" fill="var(--lavender)">${b.meter.txt}</text>`;
   });
   g += `<line x1="${W-6}" x2="${W-6}" y1="${top}" y2="${top+(n-1)*gap}" stroke="var(--muted)" stroke-width="2"/>`;
+  /* Pause: stesso segno del pentagramma, al centro della tablatura, così lo spazio (nota lunga) si distingue dalla pausa. */
+  const mid = top + (n-1)*gap/2, col = "var(--lavender)";
+  parsed.bars.forEach(b => b.events.filter(r => r.rest).forEach(r => {
+    const cx = x(r.start) + 4; let s = `<rect x="${cx-9}" y="${mid-15}" width="${r.dot?26:18}" height="30" fill="var(--bg)"/>`;
+    if(r.sym==="w") s += `<rect x="${cx-7}" y="${mid-5}" width="14" height="5" fill="${col}"/><line x1="${cx-9}" x2="${cx+9}" y1="${mid-5}" y2="${mid-5}" stroke="${col}" stroke-width="1.4"/>`;
+    else if(r.sym==="h") s += `<rect x="${cx-7}" y="${mid}" width="14" height="5" fill="${col}"/><line x1="${cx-9}" x2="${cx+9}" y1="${mid+5}" y2="${mid+5}" stroke="${col}" stroke-width="1.4"/>`;
+    else if(r.sym==="q"||r.sym==="u") s += `<path d="M${cx-3} ${mid-14} l6 7 l-5 5 l6 8 c-5 -2 -8 0 -4 5" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round"/>`;
+    else { const fl = r.sym==="s" ? 2 : 1; s += `<line x1="${cx+3}" x2="${cx-1}" y1="${mid-8}" y2="${mid+8}" stroke="${col}" stroke-width="1.6"/>`; for(let k=0;k<fl;k++) s += `<circle cx="${cx-3}" cy="${mid-7+k*7}" r="2.4" fill="${col}"/><path d="M${cx-3} ${mid-5+k*7} q4 1 6 -3" fill="none" stroke="${col}" stroke-width="1.4"/>`; }
+    if(r.dot) s += `<circle cx="${cx+10}" cy="${mid-4}" r="1.8" fill="${col}"/>`;
+    g += `<g class="t-rest">${s}</g>`;
+  }));
   let prev = null;
   parsed.events.forEach(e => {
     const i = st.indexOf(e.s); if(i<0){ prev = e; return; } const y = top + i*gap, cx = x(e.start) + 4;

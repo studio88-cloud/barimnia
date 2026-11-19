@@ -134,7 +134,7 @@ L5:{steps:[
 ]},
 L6:{steps:[
   {type:"lezione", title:"Il funk con le dita", min:4, polly:["salto","Uno forte, il resto leggero: il funk è dinamica."],
-   text:["Il funk con le dita vive di sedicesimi, ghost notes e accenti. La fondamentale sull'“uno” è sacra; il resto è un dialogo di note piene, note morte e pause.","Il volume conta: le note piene suonano decise, le ghost appena accennate. Più contrasto c'è, più il groove “spinge”."],
+   text:["Il funk con le dita vive di sedicesimi, ghost notes e accenti. La fondamentale sull'“uno” è sacra; il resto è un dialogo di note piene, ghost notes e pause.","Il volume conta: le note piene suonano decise, le ghost appena accennate. Più contrasto c'è, più il groove “spinge”."],
    remember:"L'uno è sacro · contrasto tra note piene e ghost."},
   {type:"lezione", title:"R&B e soul", min:4, polly:["cuffie","Groove morbido e profondo: suona dietro il battito, non davanti."],
    text:["Nell'R&B e nel soul il basso è più melodico e rilassato: usa le note degli accordi di settima (♭3, ♭7, 9) e spesso suona leggermente “dietro” il battito, con un tocco pieno e caldo.","Sui giri m7-7 (come Dm7-G7) la terza e la settima di ogni accordo creano piccole melodie molto efficaci."],
@@ -149,7 +149,7 @@ L6:{steps:[
    recipe:{base:"E7 · E7 · A7 · E7, funk, 96 BPM", ing:"Fondamentale, ottava, ♭7, ♯9 (Sol) e ghost notes; sedicesimi.",
      rules:["L'“uno” sempre sulla fondamentale, accentato.","Almeno due ghost notes per battuta.","Nella battuta 4 un piccolo fill a sedicesimi."],
      goal:"Un groove di una battuta ripetuto 8 volte, con il fill alla fine.", help:"Su E7: Mi (a vuoto) · Re (Re a vuoto) · Sol (Sol a vuoto) · Sol♯ (Sol 1)."},
-   checklist:["L'uno era sempre forte e preciso?","C'erano ghost notes?","Le note piene e quelle morte si distinguevano?","Il fill tornava sull'uno?"]},
+   checklist:["L'uno era sempre forte e preciso?","C'erano ghost notes?","Le note piene e le ghost notes si distinguevano?","Il fill tornava sull'uno?"]},
   {type:"crea", title:"C2 · Il tuo R&B", min:8, bpm:92, chords:["Dm7","G7","Dm7","G7"], style:"Pop – RnB",
    recipe:{base:"Dm7 · G7 · Dm7 · G7, R&B, 92 BPM", ing:"Note degli accordi di settima: 1, ♭3, 5, ♭7, e la 3 di G7.",
      rules:["Ogni battuta inizia con la fondamentale.","Collega la ♭7 di Dm7 (Do) alla 3 di G7 (Si).","Suona morbido, leggermente dietro il battito."],
@@ -275,7 +275,7 @@ L10:{steps:[
   {type:"quiz", title:"Quiz finale", min:5, questions:[
     {q:"Nella son clave 3-2, quanti colpi ha la prima battuta?", o:["3","2","4"], c:0},
     {q:"Nel tumbao, l'uno è…", o:["Vuoto","Accentato","Sulla quinta"], c:0},
-    {q:"Il 4 del tumbao suona…", o:["La fondamentale dell'accordo successivo","La terza","Una nota morta"], c:0},
+    {q:"Il 4 del tumbao suona…", o:["La fondamentale dell'accordo successivo","La terza","Una ghost note"], c:0},
     {q:"Il cha-cha-chá ha note su…", o:["1, 3 e 3e","2 e 4","Tutti i sedicesimi"], c:0},
     {q:"Il songo mescola il tumbao con…", o:["Il funk","Il valzer","Il blues lento"], c:0},
     {q:"Su F, il Do al 3° tasto della corda La è…", o:["La quinta","La terza","La settima"], c:0}]}

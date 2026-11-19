@@ -1,7 +1,7 @@
 /* Notazione compatta:
    corda+tasto+durata[.][segni][:grado]
    durate: w semibreve · h minima · q semiminima · e ottavo · s sedicesimo · t ottavo di terzina · u semiminima di terzina; "." = puntata
-   segni: x nota morta · g ghost note · H hammer-on · P pull-off · S slide · ~ vibrato · ^ accento · T pollice · O pop · Q tapping · * armonico naturale · A armonico artificiale
+   segni: x ghost note stoppata · g ghost note intonata · H hammer-on · P pull-off · S slide · ~ vibrato · ^ accento · T pollice · O pop · Q tapping · * armonico naturale · A armonico artificiale
    gradi: :1 :b3 :3 :5 :b7 :8 :9 …   pause: rq, re., rs …   [Sigla] all'inizio della battuta   {7/8} oppure {7/8:2+2+3} cambia il tempo */
 const DUR = {w:4, h:2, q:1, e:0.5, s:0.25, t:1/3, u:2/3};
 const HARM = {12:12, 7:19, 19:19, 5:24, 24:24, 4:28, 9:28, 16:28, 3:31};
@@ -109,6 +109,17 @@ function svgTab(parsed, opt){
     if(b.meterChange || (bi===0 && b.meter.txt!=="4/4")) g += `<text x="${bx+4}" y="${top+(n-1)*gap+13}" font-size="10" font-weight="800" fill="var(--lavender)">${b.meter.txt}</text>`;
   });
   g += `<line x1="${W-6}" x2="${W-6}" y1="${top}" y2="${top+(n-1)*gap}" stroke="var(--muted)" stroke-width="2"/>`;
+  /* Pause: stesso segno del pentagramma, al centro della tablatura, così lo spazio (nota lunga) si distingue dalla pausa. */
+  const mid = top + (n-1)*gap/2, col = "var(--lavender)";
+  parsed.bars.forEach(b => b.events.filter(r => r.rest).forEach(r => {
+    const cx = x(r.start) + 4; let s = `<rect x="${cx-9}" y="${mid-15}" width="${r.dot?26:18}" height="30" fill="var(--bg)"/>`;
+    if(r.sym==="w") s += `<rect x="${cx-7}" y="${mid-5}" width="14" height="5" fill="${col}"/><line x1="${cx-9}" x2="${cx+9}" y1="${mid-5}" y2="${mid-5}" stroke="${col}" stroke-width="1.4"/>`;
+    else if(r.sym==="h") s += `<rect x="${cx-7}" y="${mid}" width="14" height="5" fill="${col}"/><line x1="${cx-9}" x2="${cx+9}" y1="${mid+5}" y2="${mid+5}" stroke="${col}" stroke-width="1.4"/>`;
+    else if(r.sym==="q"||r.sym==="u") s += `<path d="M${cx-3} ${mid-14} l6 7 l-5 5 l6 8 c-5 -2 -8 0 -4 5" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round"/>`;
+    else { const fl = r.sym==="s" ? 2 : 1; s += `<line x1="${cx+3}" x2="${cx-1}" y1="${mid-8}" y2="${mid+8}" stroke="${col}" stroke-width="1.6"/>`; for(let k=0;k<fl;k++) s += `<circle cx="${cx-3}" cy="${mid-7+k*7}" r="2.4" fill="${col}"/><path d="M${cx-3} ${mid-5+k*7} q4 1 6 -3" fill="none" stroke="${col}" stroke-width="1.4"/>`; }
+    if(r.dot) s += `<circle cx="${cx+10}" cy="${mid-4}" r="1.8" fill="${col}"/>`;
+    g += `<g class="t-rest">${s}</g>`;
+  }));
   let prev = null;
   parsed.events.forEach(e => {
     const i = st.indexOf(e.s); if(i<0){ prev = e; return; } const y = top + i*gap, cx = x(e.start) + 4;
