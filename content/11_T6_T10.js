@@ -144,7 +144,7 @@ T9:{steps:[
    bars:`${R("E5s D7s",8)} | ${R("A5s G7s",8)} | ${R("E3s D5s",8)} | ${R("E5s D7s",6)} E5q`},
   {type:"pratica", title:"P1 · Galoppo in Mi minore", min:7, bpm:[80,120], view:"tab", style:"Pop – Rock",
    task:"Sedicesimi continui su un giro rock. Respira, tieni le spalle giù e lascia lavorare le dita.",
-   bars:`[Em] ${R("E0s:1",12)} D2s:8 D0s:b7 A2s:5 A0s:4 | [C] ${R("A3s:1",12)} G0s:5 D2s:3 A3s:1 D2s:3 | [D] ${R("A5s:1",12)} G2s:5 D4s:3 A5s:1 A0s:5 | [Em] ${R("E0s:1",12)} A2s:5 A0s:4 E2s:2 E0s:1`},
+   bars:`[Em] ${R("E0s:1",12)} D2s:8 D0s:b7 A2s:5 A0s:4 | [C] ${R("A3s:1",12)} G0s:5 D2s:3 A3s:1 D2s:3 | [D] ${R("A5s:1",12)} G2s:5 D4s:3 A5s:1 A0s:5 | [Em] ${R("E0s:1",12)} A2s:5 A0s:4 E3s:b3 E2s:2`},
   {type:"quiz", title:"Quiz finale", min:5, questions:[
     {q:"Qual è il vero limite della velocità?", o:["La tensione","Il basso","Il metronomo"], c:0},
     {q:"Di quanto sale il tempo a ogni gradino?", o:["5 BPM","20 BPM","Raddoppia"], c:0},
