@@ -28,7 +28,7 @@ function chordNotes(sym){
   return c.iv.map(i => base + 12 + i).concat(c.iv.length===2 ? [base+24] : []);
 }
 function pad(notes, t, dur){ notes.forEach(n => { const o = AC.createOscillator(), g = AC.createGain(); o.type="triangle"; o.frequency.value = hz(n); g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(.04,t+.03); g.gain.setValueAtTime(.04,t+dur*.8); g.gain.exponentialRampToValueAtTime(0.0001,t+dur); o.connect(g).connect(AC.destination); o.start(t); o.stop(t+dur+.05); }); }
-function deadNote(t){ noise(t, "bandpass", 420, .25, .05); }
+function deadNote(t, m){ noise(t, "bandpass", 420, .2, .04); if(m && typeof mutedNote === "function") mutedNote(m, t); }
 
 /* Motore a griglia fine: 12 tick per battito (sedicesimi e terzine).
    cfg.bars = [{start, len, chord, meter}] in battiti; se manca si costruisce da cfg.chords. */
@@ -81,7 +81,7 @@ const P = {
       else if(x.a==="snare") noise(t, "bandpass", 1900, .3, .13);
       else if(x.a==="hat") noise(x.sw ? swT : t, "highpass", 7500, .055, .035);
       else if(x.a==="note"){ const e = x.e, tt = x.sw ? swT : t;
-        if(c.example){ if(e.dead) deadNote(tt); else bassNote(e.midi, tt, Math.max(.06, e.d*this.spb*.92), e.ghost ? .35 : e.acc ? 1.25 : 1); }
+        if(c.example){ if(e.dead) deadNote(tt, e.midi); else bassNote(e.midi, tt, Math.max(.06, e.d*this.spb*.92), e.ghost ? .35 : e.acc ? 1.25 : 1, {pick:c.pick, slap:e.thumb || e.up, pop:e.pop, pm:e.pm, harm:e.nh || e.ah, ghost:e.ghost}); }
         setTimeout(() => c.onNote && c.onNote(e), delay + (x.sw ? this.spb/6*1000 : 0)); }
     });
   },
