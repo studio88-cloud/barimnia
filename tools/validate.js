@@ -20,7 +20,7 @@ for(const id of Object.keys(C)){
   ch.steps.forEach((s,i) => {
     if(!s.title) E(id,i,'manca title'); if(!s.min) W(id,i,'manca min');
     if(s.type==='lezione'){ if(!s.text||!s.polly) E(id,i,'lezione senza text/polly'); else if(!POSES.includes(s.polly[0])) E(id,i,'posa sconosciuta '+s.polly[0]);
-      if(s.board){ const ok = s.board==='naturali' || s.board.split(/\s+/).every(t=>/^([BEADGC])(\d+)(?::((?:bb|b|#)?\d+))?$/.test(t)); if(!ok) E(id,i,'board non valido: '+s.board); } }
+      if(s.board){ const ok = s.board==='naturali' || s.board.split(/\s+/).every(t=>/^([BEADGC])(\d+)\*?(?::((?:bb|b|#)?\d+))?$/.test(t)); if(!ok) E(id,i,'board non valido: '+s.board); } }
     if(s.type==='app'||s.type==='quiz'){ (s.questions||[]).forEach((q,k) => { if(!(q.c>=0 && q.c<q.o.length)) E(id,i,`domanda ${k+1}: indice risposta`); if(new Set(q.o).size!==q.o.length) E(id,i,`domanda ${k+1}: opzioni duplicate`); }); if(!s.questions||!s.questions.length) E(id,i,'nessuna domanda'); if(s.type==='quiz' && s.questions.length<6) W(id,i,'quiz corto'); }
     if(['strumento','pratica','modello'].includes(s.type)){
       if(!s.bars||!s.task||!s.bpm||s.bpm.length!==2) { E(id,i,'campi mancanti'); return; }

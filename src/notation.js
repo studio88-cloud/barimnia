@@ -55,7 +55,7 @@ function boardPositions(spec){
     const out=[]; strings().forEach(s => { for(let f=0; f<=12; f++){ const pc=(OPEN[s]+f)%12; if([0,2,4,5,7,9,11].includes(pc)) out.push({s,f,deg:0}); } });
     return out;
   }
-  return spec.split(/\s+/).map(t => { const m=t.match(/^([BEADGC])(\d+)(?::((?:bb|b|#)?\d+))?$/); return m ? {s:m[1], f:+m[2], deg:m[3]||""} : null; }).filter(Boolean);
+  return spec.split(/\s+/).map(t => { const m=t.match(/^([BEADGC])(\d+)(\*)?(?::((?:bb|b|#)?\d+))?$/); if(!m) return null; const p = {s:m[1], f:+m[2], deg:m[4]||""}; if(m[3] && HARM[p.f]){ p.nh = true; p.midi = OPEN[p.s] + HARM[p.f]; } return p; }).filter(Boolean);
 }
 
 /* Manico a pallini: corda più acuta in alto, come la tab. Per i mancini si specchia in orizzontale.
@@ -88,7 +88,7 @@ function svgBoard(pos, opt){
     if(p.f > 0 && p.f <= lo) return;
     const x = X(fx(p.f)), y = top + i*gap; const midi = p.midi || (OPEN[p.s] + p.f);
     const lab = opt.letters ? EN[midi%12] : IT[midi%12];
-    const shape = (p.nh || p.ah) ? `<rect x="${x-9}" y="${y-9}" width="18" height="18" transform="rotate(45 ${x} ${y})" fill="${degColor(p.deg)}" stroke="var(--bg)" stroke-width="1.5"/>` : `<circle cx="${x}" cy="${y}" r="10" fill="${degColor(p.deg)}" stroke="var(--bg)" stroke-width="1.5"/>`;
+    const shape = (p.nh || p.ah) ? `<rect x="${x-8}" y="${y-8}" width="16" height="16" transform="rotate(45 ${x} ${y})" fill="${degColor(p.deg)}" stroke="var(--bg)" stroke-width="1.5"/>` : `<circle cx="${x}" cy="${y}" r="10" fill="${degColor(p.deg)}" stroke="var(--bg)" stroke-width="1.5"/>`;
     g += `<g class="n-dot" data-pos="${k}">${shape}<text x="${x}" y="${y+3.5}" text-anchor="middle" font-size="${lab.length>2?8:9.5}" font-weight="800" fill="${degNum(p.deg)===1?'#1B1428':'var(--text)'}">${lab}</text></g>`;
   });
   return g + "</svg>";
