@@ -4,8 +4,8 @@ const R = (s,n) => Array(n).fill(s).join(" ");
 Object.assign(CONTENT, {
 H1:{steps:[
   {type:"lezione", title:"I nodi del manico", min:4, polly:["cuffie","Sfiora, non premere: la corda si divide e canta."],
-   text:["Se sfiori una corda in certi punti precisi e la pizzichi, la corda vibra divisa in parti uguali: nasce un armonico naturale, una nota limpida come una campana.","I punti più facili sono sopra il 12°, il 7° e il 5° tasto. Il dito sfiora esattamente sopra la barretta, non nel mezzo del tasto, e si stacca appena dopo il pizzico."],
-   remember:"12° = ottava · 7° = ottava + quinta · 5° = due ottave · 4° e 9° = due ottave + terza.", board:"G12 D12 A12 E12 G7 D7 A7 E7 G5 D5 A5 E5"},
+   text:["Se sfiori una corda in certi punti precisi e la pizzichi, la corda vibra divisa in parti uguali: nasce un armonico naturale, una nota limpida come una campana.","I punti più facili sono sopra il 12°, il 7° e il 5° tasto; poi vengono il 9° e il 4°, che danno la terza. Il dito sfiora esattamente sopra la barretta, non nel mezzo del tasto, e si stacca appena dopo il pizzico."],
+   remember:"12° = ottava · 7° = ottava + quinta · 5° = due ottave · 4° e 9° = due ottave + terza.", board:"G12*:1 D12*:1 A12*:1 E12*:1 G9*:3 D9*:3 A9*:3 E9*:3 G7*:5 D7*:5 A7*:5 E7*:5 G5*:1 D5*:1 A5*:1 E5*:1 G4*:3 D4*:3 A4*:3 E4*:3"},
   {type:"lezione", title:"Accordare con gli armonici", min:3, polly:["accorda","Due campane uguali: quando non “ondeggiano” più, sei intonato."],
    text:["L'armonico al 5° tasto di una corda e quello al 7° della corda successiva suonano la stessa nota. Se il basso è scordato, le due note insieme creano un'ondulazione (i battimenti).","Gira la meccanica finché l'ondulazione rallenta e sparisce. È un ottimo controllo dopo l'accordatore."],
    remember:"5° della corda grave = 7° della corda successiva."},
